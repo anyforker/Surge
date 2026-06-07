@@ -1,0 +1,34 @@
+# NAME: Ant Group / Alibaba / Alipay Domains
+# AUTHOR: Oz
+# UPDATED: 2026-06-07 23:18:03
+# PATTERN: alipay/aliyun/alibaba/mybank/antfin[-inc].[com/cn/net]
+DOMAIN-SUFFIX,alipay.com
+DOMAIN-SUFFIX,alipay.cn
+DOMAIN-SUFFIX,alipay.net
+DOMAIN-SUFFIX,alipay-inc.com
+DOMAIN-SUFFIX,alipay-inc.cn
+DOMAIN-SUFFIX,alipay-inc.net
+DOMAIN-SUFFIX,aliyun.com
+DOMAIN-SUFFIX,aliyun.cn
+DOMAIN-SUFFIX,aliyun.net
+DOMAIN-SUFFIX,aliyun-inc.com
+DOMAIN-SUFFIX,aliyun-inc.cn
+DOMAIN-SUFFIX,aliyun-inc.net
+DOMAIN-SUFFIX,alibaba.com
+DOMAIN-SUFFIX,alibaba.cn
+DOMAIN-SUFFIX,alibaba.net
+DOMAIN-SUFFIX,alibaba-inc.com
+DOMAIN-SUFFIX,alibaba-inc.cn
+DOMAIN-SUFFIX,alibaba-inc.net
+DOMAIN-SUFFIX,mybank.com
+DOMAIN-SUFFIX,mybank.cn
+DOMAIN-SUFFIX,mybank.net
+DOMAIN-SUFFIX,mybank-inc.com
+DOMAIN-SUFFIX,mybank-inc.cn
+DOMAIN-SUFFIX,mybank-inc.net
+DOMAIN-SUFFIX,antfin.com
+DOMAIN-SUFFIX,antfin.cn
+DOMAIN-SUFFIX,antfin.net
+DOMAIN-SUFFIX,antfin-inc.com
+DOMAIN-SUFFIX,antfin-inc.cn
+DOMAIN-SUFFIX,antfin-inc.net
