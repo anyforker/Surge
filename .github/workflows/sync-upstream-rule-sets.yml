@@ -1,0 +1,50 @@
+name: Sync upstream rule sets
+
+on:
+  schedule:
+    - cron: "37 19 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-upstream-rule-sets
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate mirrored rule sets
+        run: bash scripts/sync-rule-sets.sh
+
+      - name: Validate mirrored rule sets
+        run: |
+          awk -F '\t' 'NF && $1 !~ /^#/ { count[$1]++ } END { for (target in count) if (count[target] > 1) { print target; bad=1 } exit bad }' scripts/rule-set-sources.tsv
+          while IFS=$'\t' read -r target source extra; do
+            if [ -z "${target:-}" ] || [[ "$target" == \#* ]]; then
+              continue
+            fi
+            test -z "${extra:-}"
+            test -s "$target"
+            grep -q '^## Mirrored Surge rule set$' "$target"
+            grep -q '^## Source: ' "$target"
+          done < scripts/rule-set-sources.tsv
+
+      - name: Commit and push changes
+        run: |
+          if git diff --quiet -- rule/upstream; then
+            echo "No upstream rule set changes."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add rule/upstream
+          git commit -m "Sync upstream rule sets"
+          git push

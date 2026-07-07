@@ -1,0 +1,12 @@
+## Mirrored Surge rule set
+## Source: https://raw.githubusercontent.com/anyforker/Surge/refs/heads/main/rule/ai.list
+## Synced by: scripts/sync-rule-sets.sh
+
+# NAME: Custom AI Domain
+# AUTHOR: surmrf
+# REPO: https://github.com/surmrf/surge
+# UPDATED: 2026-02-02 23:43:25
+# DOMAIN: 2
+# TOTAL: 2
+DOMAIN-SUFFIX,taotiao.tech
+DOMAIN-SUFFIX,ip-api.com
