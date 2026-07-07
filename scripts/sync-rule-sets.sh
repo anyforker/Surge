@@ -20,14 +20,55 @@ if [ -n "$duplicate_targets" ]; then
   exit 1
 fi
 
+write_header() {
+  local source="$1"
+  local mode="$2"
+
+  printf '## Synced Surge rule set\n'
+  printf '## Source: %s\n' "$source"
+  printf '## Mode: %s\n' "$mode"
+  printf '## Synced by: scripts/sync-rule-sets.sh\n'
+  printf '\n'
+}
+
+sync_mirror() {
+  local source="$1"
+
+  curl -L --fail --silent --show-error --max-time 60 "$source"
+}
+
+sync_geosite_domain_suffix() {
+  local source="$1"
+
+  {
+    curl -L --fail --silent --show-error --max-time 60 "$source" \
+      | awk 'NF && $0 !~ /^#/ { if ($0 ~ /^\+\./) print substr($0,3); else print $0 }'
+
+    printf '%s\n' \
+      admireme.vip \
+      fansly.com \
+      fanvue.com \
+      justfor.fans \
+      loyalfans.com \
+      onlyfans.com \
+      sex \
+      xxx
+  } \
+    | sed 's/[[:space:]]//g' \
+    | awk 'NF && $0 ~ /^[A-Za-z0-9._-]+$/ { print tolower($0) }' \
+    | sort -u \
+    | awk '{ print "DOMAIN-SUFFIX," $0 }'
+}
+
 line_no=0
-while IFS=$'\t' read -r target source extra; do
+while IFS=$'\t' read -r target source mode extra; do
   line_no=$((line_no + 1))
 
   if [ -z "${target:-}" ] || [[ "$target" == \#* ]]; then
     continue
   fi
 
+  mode="${mode:-mirror}"
   if [ -z "${source:-}" ] || [ -n "${extra:-}" ]; then
     echo "Invalid manifest row at line $line_no" >&2
     exit 1
@@ -38,15 +79,26 @@ while IFS=$'\t' read -r target source extra; do
   tmp_file="$tmp_dir/$(printf '%s' "$target" | tr '/ ' '__').tmp"
 
   {
-    printf '## Mirrored Surge rule set\n'
-    printf '## Source: %s\n' "$source"
-    printf '## Synced by: scripts/sync-rule-sets.sh\n'
-    printf '\n'
-    curl -L --fail --silent --show-error --max-time 60 "$source"
+    write_header "$source" "$mode"
+
+    case "$mode" in
+      mirror)
+        sync_mirror "$source"
+        ;;
+      geosite-domain-suffix)
+        printf '## Supplemental entries: adult creator platforms and adult TLDs not present in source\n'
+        printf '\n'
+        sync_geosite_domain_suffix "$source"
+        ;;
+      *)
+        echo "Unsupported sync mode at line $line_no: $mode" >&2
+        exit 1
+        ;;
+    esac
   } > "$tmp_file"
 
   if [ ! -s "$tmp_file" ]; then
-    echo "Downloaded empty rule set: $source" >&2
+    echo "Generated empty rule set: $target" >&2
     exit 1
   fi
 

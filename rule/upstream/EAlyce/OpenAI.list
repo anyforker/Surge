@@ -1,5 +1,6 @@
-## Mirrored Surge rule set
+## Synced Surge rule set
 ## Source: https://raw.githubusercontent.com/EAlyce/conf/refs/heads/main/Rule/OpenAI.list
+## Mode: mirror
 ## Synced by: scripts/sync-rule-sets.sh
 
 DOMAIN,7h1s_rul35et_i5_mad3_by_5ukk4w-ruleset.skk.moe

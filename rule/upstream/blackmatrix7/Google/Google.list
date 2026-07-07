@@ -1,5 +1,6 @@
-## Mirrored Surge rule set
+## Synced Surge rule set
 ## Source: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/Google/Google.list
+## Mode: mirror
 ## Synced by: scripts/sync-rule-sets.sh
 
 # NAME: Google

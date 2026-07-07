@@ -20,20 +20,35 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Generate mirrored rule sets
+      - name: Generate synced rule sets
         run: bash scripts/sync-rule-sets.sh
 
-      - name: Validate mirrored rule sets
+      - name: Validate synced rule sets
         run: |
           awk -F '\t' 'NF && $1 !~ /^#/ { count[$1]++ } END { for (target in count) if (count[target] > 1) { print target; bad=1 } exit bad }' scripts/rule-set-sources.tsv
-          while IFS=$'\t' read -r target source extra; do
+          while IFS=$'\t' read -r target source mode extra; do
             if [ -z "${target:-}" ] || [[ "$target" == \#* ]]; then
               continue
             fi
+            mode="${mode:-mirror}"
             test -z "${extra:-}"
             test -s "$target"
-            grep -q '^## Mirrored Surge rule set$' "$target"
-            grep -q '^## Source: ' "$target"
+            grep -q '^## Synced Surge rule set$' "$target"
+            grep -q "^## Source: $source$" "$target"
+            grep -q "^## Mode: $mode$" "$target"
+
+            case "$mode" in
+              mirror)
+                ;;
+              geosite-domain-suffix)
+                awk 'NF && $0 !~ /^##/ && $0 !~ /^DOMAIN-SUFFIX,[A-Za-z0-9._-]+$/ { print FILENAME ":" NR ":" $0; bad=1 } END { exit bad }' "$target"
+                test -z "$(awk 'NF && $0 !~ /^##/ { print }' "$target" | sort | uniq -d)"
+                ;;
+              *)
+                echo "Unsupported sync mode: $mode" >&2
+                exit 1
+                ;;
+            esac
           done < scripts/rule-set-sources.tsv
 
       - name: Commit and push changes
