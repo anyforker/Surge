@@ -1,7 +1,9 @@
-# NAME: Ant Group / Alibaba / Alipay Domains
-# AUTHOR: Oz
-# UPDATED: 2026-06-07 23:18:03
-# PATTERN: alipay/aliyun/alibaba/mybank/antfin[-inc].[com/cn/net]
+# NAME: Custom Corporate
+# AUTHOR: anyforker
+# REPO: https://github.com/anyforker/Surge
+# UPDATED: 2026-07-07 13:35:49
+# DOMAIN-SUFFIX: 30
+# TOTAL: 30
 DOMAIN-SUFFIX,alipay.com
 DOMAIN-SUFFIX,alipay.cn
 DOMAIN-SUFFIX,alipay.net
