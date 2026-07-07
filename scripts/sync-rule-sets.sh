@@ -4,6 +4,7 @@ set -euo pipefail
 manifest="${MANIFEST:-scripts/rule-set-sources.tsv}"
 tmp_dir="$(mktemp -d)"
 trap 'rm -rf "$tmp_dir"' EXIT
+expected_targets="$tmp_dir/expected-targets.txt"
 
 if [ ! -f "$manifest" ]; then
   echo "Manifest not found: $manifest" >&2
@@ -32,6 +33,7 @@ while IFS=$'\t' read -r target source extra; do
     exit 1
   fi
 
+  printf '%s\n' "$target" >> "$expected_targets"
   mkdir -p "$(dirname "$target")"
   tmp_file="$tmp_dir/$(printf '%s' "$target" | tr '/ ' '__').tmp"
 
@@ -54,3 +56,13 @@ while IFS=$'\t' read -r target source extra; do
 
   mv "$tmp_file" "$target"
 done < "$manifest"
+
+if [ -d rule/upstream ]; then
+  while IFS= read -r current_file; do
+    if ! grep -Fxq -- "$current_file" "$expected_targets"; then
+      rm -f "$current_file"
+    fi
+  done < <(find rule/upstream -type f -name '*.list' | sort)
+
+  find rule/upstream -type d -empty -delete
+fi
