@@ -181,12 +181,11 @@ test("module declares a native Surge panel argument", () => {
     "utf8"
   );
 
-  assert.match(moduleSource, /^#!arguments=UPDATE_INTERVAL=600$/m);
-  assert.match(moduleSource, /update-interval=%UPDATE_INTERVAL%/);
+  assert.match(moduleSource, /^#!arguments=UPDATE_INTERVAL:600$/m);
+  assert.match(moduleSource, /update-interval=\{\{\{UPDATE_INTERVAL\}\}\}/);
   assert.match(
     moduleSource,
     /script-path=https:\/\/raw\.githubusercontent\.com\/anyforker\/Surge\/[0-9a-f]{40}\/module\/panel\/stream-check\.js/
   );
   assert.doesNotMatch(moduleSource, /script-update-interval=/);
-  assert.doesNotMatch(moduleSource, /\{\{\{/);
 });
