@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "node --test tests/*.test.js",
-    "sync:module-scripts": "bash scripts/sync-module-scripts.sh",
-    "sync:adblock-modules": "bash scripts/sync-adblock-modules.sh"
+    "sync:module-scripts": "bash scripts/sync-module-scripts.sh"
   },
   "repository": {
     "type": "git",

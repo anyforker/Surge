@@ -6,14 +6,11 @@ const test = require("node:test");
 const root = path.resolve(__dirname, "..");
 const moduleDir = path.join(root, "module");
 const panelDir = path.join(moduleDir, "panel");
-const repoRawBase =
-  "https://raw.githubusercontent.com/anyforker/Surge/main/";
-const panelRawBase =
+const rawBase =
   "https://raw.githubusercontent.com/anyforker/Surge/main/module/panel/";
 
 const modules = [
   "ai-check.sgmodule",
-  "app-adblock.sgmodule",
   "flush-dns.sgmodule",
   "iringo-location-service.sgmodule",
   "iringo-weatherkit.sgmodule",
@@ -22,19 +19,7 @@ const modules = [
   "network-speed.sgmodule",
   "stream-media.sgmodule",
   "web-adblock.sgmodule",
-  "wechat-adblock.sgmodule",
-  "weibo-lite-adblock.sgmodule",
-  "youtube-adblock.sgmodule",
-  "youtube-enhance.sgmodule",
 ];
-
-const syncedAdblockModules = new Map([
-  ["app-adblock.sgmodule", "应用广告过滤"],
-  ["wechat-adblock.sgmodule", "微信公众号去广告"],
-  ["weibo-lite-adblock.sgmodule", "微博轻享版去广告"],
-  ["youtube-adblock.sgmodule", "YouTube 去广告"],
-  ["youtube-enhance.sgmodule", "YouTube 增强"],
-]);
 
 const panelModules = new Map([
   ["ai-check.sgmodule", "AI 可用性检测"],
@@ -65,52 +50,20 @@ const expectedScripts = [
 
 const locallyMaintainedScripts = new Set(["ai-check.js", "stream-media.js"]);
 
-test("all managed module script paths use existing files in this repository", () => {
+test("all managed module script paths use this repository", () => {
   const paths = modules.flatMap((moduleName) => {
     const source = fs.readFileSync(path.join(moduleDir, moduleName), "utf8");
-    return [
-      ...source.matchAll(/script-path\s*=\s*(https:\/\/[^,\s]+\.js)/g),
-    ].map((match) => match[1]);
+    return [...source.matchAll(/script-path=(https:\/\/[^,\s]+\.js)/g)].map(
+      (match) => match[1]
+    );
   });
 
   assert.ok(paths.length > 0);
   for (const scriptPath of paths) {
-    assert.ok(scriptPath.startsWith(repoRawBase), scriptPath);
-    const relativePath = scriptPath.slice(repoRawBase.length);
-    assert.ok(fs.existsSync(path.join(root, relativePath)), relativePath);
+    assert.ok(scriptPath.startsWith(rawBase), scriptPath);
+    const filename = scriptPath.slice(rawBase.length);
+    assert.ok(fs.existsSync(path.join(panelDir, filename)), filename);
   }
-});
-
-test("synced AdBlock modules have normalized metadata and local resources", () => {
-  for (const [moduleName, expectedName] of syncedAdblockModules) {
-    const source = fs.readFileSync(path.join(moduleDir, moduleName), "utf8");
-
-    assert.match(source, new RegExp(`^#!name=${expectedName}$`, "m"));
-    assert.match(source, /^#!category=AdBlock$/m);
-    assert.match(source, /^#!date=\d{4}-\d{2}-\d{2}$/m);
-    assert.match(source, /^#!version=\d+\.\d+\.\d+$/m);
-
-    for (const match of source.matchAll(/data="(https:\/\/[^\"]+)/g)) {
-      const resourceUrl = match[1];
-      assert.ok(resourceUrl.startsWith(repoRawBase), resourceUrl);
-      const relativePath = resourceUrl.slice(repoRawBase.length);
-      assert.ok(fs.existsSync(path.join(root, relativePath)), relativePath);
-    }
-  }
-});
-
-test("AdBlock upstream manifest covers the five synced modules", () => {
-  const manifest = fs.readFileSync(
-    path.join(root, "scripts/adblock-module-sources.tsv"),
-    "utf8"
-  );
-  const actualModules = manifest
-    .split("\n")
-    .filter((line) => line && !line.startsWith("#"))
-    .map((line) => path.basename(line.split("\t")[0]))
-    .sort();
-
-  assert.deepEqual(actualModules, [...syncedAdblockModules.keys()].sort());
 });
 
 test("README lists every managed module Raw URL", () => {
@@ -202,7 +155,7 @@ test("web adblock runtime helper scripts use this repository", () => {
     "web-adblock-element.js",
     "web-adblock-agent.js",
   ]) {
-    assert.match(mainSource, new RegExp(`${panelRawBase}${filename}`));
+    assert.match(mainSource, new RegExp(`${rawBase}${filename}`));
   }
-  assert.match(cnysSource, new RegExp(`${panelRawBase}web-adblock-user\\.js`));
+  assert.match(cnysSource, new RegExp(`${rawBase}web-adblock-user\\.js`));
 });
