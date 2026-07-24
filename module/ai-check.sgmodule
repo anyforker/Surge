@@ -8,7 +8,7 @@
 #!arguments=UPDATE_INTERVAL:600
 
 [Panel]
-ai-check = script-name=ai-check, title="AI 可用性检测", content="请刷新面板", update-interval={{{UPDATE_INTERVAL}}}
+AI 可用性检测 = script-name=ai-check, title="AI 可用性检测", content="请刷新面板", update-interval={{{UPDATE_INTERVAL}}}
 
 [Script]
 ai-check = type=generic, timeout=10, script-path=https://raw.githubusercontent.com/anyforker/Surge/main/module/panel/ai-check.js
