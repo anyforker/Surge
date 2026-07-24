@@ -66,6 +66,20 @@ test("all managed module script paths use this repository", () => {
   }
 });
 
+test("README lists every managed module Raw URL", () => {
+  const readme = fs.readFileSync(path.join(root, "README.md"), "utf8");
+
+  for (const moduleName of modules) {
+    assert.match(
+      readme,
+      new RegExp(
+        `^https://raw\\.githubusercontent\\.com/anyforker/Surge/main/module/${moduleName}$`,
+        "m"
+      )
+    );
+  }
+});
+
 test("panel filenames follow one kebab-case style", () => {
   const actualScripts = fs
     .readdirSync(panelDir)

@@ -22,4 +22,18 @@ Surge 规则、模块、图标与相关维护脚本。
 | Enhancement | iRingo 定位服务 | [`iringo-location-service.sgmodule`](module/iringo-location-service.sgmodule) |
 | Enhancement | iRingo WeatherKit | [`iringo-weatherkit.sgmodule`](module/iringo-weatherkit.sgmodule) |
 
+### 可直接安装地址
+
+```text
+https://raw.githubusercontent.com/anyforker/Surge/main/module/ai-check.sgmodule
+https://raw.githubusercontent.com/anyforker/Surge/main/module/flush-dns.sgmodule
+https://raw.githubusercontent.com/anyforker/Surge/main/module/network-info.sgmodule
+https://raw.githubusercontent.com/anyforker/Surge/main/module/network-interface-info.sgmodule
+https://raw.githubusercontent.com/anyforker/Surge/main/module/network-speed.sgmodule
+https://raw.githubusercontent.com/anyforker/Surge/main/module/stream-media.sgmodule
+https://raw.githubusercontent.com/anyforker/Surge/main/module/web-adblock.sgmodule
+https://raw.githubusercontent.com/anyforker/Surge/main/module/iringo-location-service.sgmodule
+https://raw.githubusercontent.com/anyforker/Surge/main/module/iringo-weatherkit.sgmodule
+```
+
 `weibo.sgmodule` 是仓库中原有的独立模块，本次未调整。
