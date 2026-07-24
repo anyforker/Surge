@@ -1,0 +1,14 @@
+# target	source	mode
+module/panel/flush-dns.js	https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Module/Panel/Flush-DNS/Moore/Flush-DNS.js	mirror
+module/panel/network-info.js	https://raw.githubusercontent.com/xream/scripts/main/surge/modules/network-info/net-lsp-x.js	mirror
+module/panel/network-interface-info.js	https://raw.githubusercontent.com/xream/scripts/main/surge/modules/interface-info/interface-info.js	mirror
+module/panel/network-speed.js	https://raw.githubusercontent.com/cc63/Surge/main/Module/Panel/Speed/Moore/Speed.js	mirror
+module/panel/iringo-location-request.js	https://github.com/NSRingo/LocationService/releases/latest/download/request.bundle.js	mirror
+module/panel/iringo-location-response.js	https://github.com/NSRingo/LocationService/releases/latest/download/response.bundle.js	mirror
+module/panel/iringo-weatherkit-response.js	https://github.com/NSRingo/WeatherKit/releases/latest/download/response.bundle.js	mirror
+module/panel/web-adblock.js	https://limbopro.com/Adguard/Adblock4limbo.js	web-adblock-main
+module/panel/web-adblock-cnys.js	https://limbopro.com/Adguard/cnys.js	web-adblock-cnys
+module/panel/web-adblock-user.js	https://limbopro.com/Adguard/Adblock4limbo.user.js	mirror
+module/panel/web-adblock-function.js	https://limbopro.com/Adguard/Adblock4limbo.function.js	mirror
+module/panel/web-adblock-element.js	https://limbopro.com/Adguard/elementBlocker.user.js	mirror
+module/panel/web-adblock-agent.js	https://limbopro.com/Adguard/isAgent.js	mirror

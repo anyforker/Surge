@@ -8,6 +8,8 @@ Surge 规则、模块、图标与相关维护脚本。
 
 9 个模块使用的 JS 均归档在 [`module/panel`](module/panel)，模块中的 `script-path` 统一指向本仓库。文件名默认与模块名一致；同一模块包含多份脚本时，仅追加 `request`、`response` 等必要后缀。第三方脚本的原始来源与同步说明见 [`module/panel/README.md`](module/panel/README.md)。
 
+第三方模块脚本由 GitHub Actions 每日自动同步；仅在上游内容变化且全部校验通过时提交。
+
 | 类目 | 模块 | 文件 |
 | --- | --- | --- |
 | Tools | AI 可用性检测 | [`ai-check.sgmodule`](module/ai-check.sgmodule) |

@@ -48,6 +48,8 @@ const expectedScripts = [
   "web-adblock.js",
 ];
 
+const locallyMaintainedScripts = new Set(["ai-check.js", "stream-media.js"]);
+
 test("all managed module script paths use this repository", () => {
   const paths = modules.flatMap((moduleName) => {
     const source = fs.readFileSync(path.join(moduleDir, moduleName), "utf8");
@@ -74,6 +76,23 @@ test("panel filenames follow one kebab-case style", () => {
   for (const filename of actualScripts) {
     assert.match(filename, /^[a-z0-9]+(?:-[a-z0-9]+)*\.js$/);
   }
+});
+
+test("upstream sync manifest covers only mirrored scripts", () => {
+  const manifest = fs.readFileSync(
+    path.join(root, "scripts/module-script-sources.tsv"),
+    "utf8"
+  );
+  const mirroredScripts = manifest
+    .split("\n")
+    .filter((line) => line && !line.startsWith("#"))
+    .map((line) => path.basename(line.split("\t")[0]))
+    .sort();
+  const expectedMirrors = expectedScripts
+    .filter((filename) => !locallyMaintainedScripts.has(filename))
+    .sort();
+
+  assert.deepEqual(mirroredScripts, expectedMirrors);
 });
 
 test("visible panel titles match their module names", () => {

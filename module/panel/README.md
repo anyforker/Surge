@@ -11,7 +11,7 @@
 
 ## 上游镜像
 
-以下资源于 2026-07-24 从上游同步，原作者信息与许可声明保留在源码或原项目中。
+以下资源由 [`scripts/sync-module-scripts.sh`](../../scripts/sync-module-scripts.sh) 根据清单每日从上游同步，原作者信息与许可声明保留在源码或原项目中。定时任务在 UTC 17:30（北京时间次日 01:30）运行，也支持手动触发。
 
 | 文件 | 上游地址 |
 | --- | --- |
@@ -19,9 +19,9 @@
 | `network-info.js` | `https://raw.githubusercontent.com/xream/scripts/main/surge/modules/network-info/net-lsp-x.js` |
 | `network-interface-info.js` | `https://raw.githubusercontent.com/xream/scripts/main/surge/modules/interface-info/interface-info.js` |
 | `network-speed.js` | `https://raw.githubusercontent.com/cc63/Surge/main/Module/Panel/Speed/Moore/Speed.js` |
-| `iringo-location-request.js` | `https://github.com/NSRingo/LocationService/releases/download/v1.0.1/request.bundle.js` |
-| `iringo-location-response.js` | `https://github.com/NSRingo/LocationService/releases/download/v1.0.1/response.bundle.js` |
-| `iringo-weatherkit-response.js` | `https://github.com/NSRingo/WeatherKit/releases/download/v3.1.0/response.bundle.js` |
+| `iringo-location-request.js` | `https://github.com/NSRingo/LocationService/releases/latest/download/request.bundle.js` |
+| `iringo-location-response.js` | `https://github.com/NSRingo/LocationService/releases/latest/download/response.bundle.js` |
+| `iringo-weatherkit-response.js` | `https://github.com/NSRingo/WeatherKit/releases/latest/download/response.bundle.js` |
 | `web-adblock.js` | `https://limbopro.com/Adguard/Adblock4limbo.js` |
 | `web-adblock-cnys.js` | `https://limbopro.com/Adguard/cnys.js` |
 | `web-adblock-user.js` | `https://limbopro.com/Adguard/Adblock4limbo.user.js` |

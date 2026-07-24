@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node --test tests/*.test.js"
+    "test": "node --test tests/*.test.js",
+    "sync:module-scripts": "bash scripts/sync-module-scripts.sh"
   },
   "repository": {
     "type": "git",

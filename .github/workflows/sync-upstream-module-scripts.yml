@@ -1,0 +1,75 @@
+name: Sync upstream module scripts
+
+on:
+  schedule:
+    - cron: "30 17 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-upstream-module-scripts
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate synced module scripts
+        run: bash scripts/sync-module-scripts.sh
+
+      - name: Validate synced module scripts
+        run: |
+          bash -n scripts/sync-module-scripts.sh
+          awk -F '\t' 'NF && $1 !~ /^#/ { count[$1]++ } END { for (target in count) if (count[target] > 1) { print target; bad=1 } exit bad }' scripts/module-script-sources.tsv
+          test "$(awk -F '\t' 'NF && $1 !~ /^#/ { count++ } END { print count+0 }' scripts/module-script-sources.tsv)" -eq 13
+
+          while IFS=$'\t' read -r target source mode extra; do
+            if [ -z "${target:-}" ] || [[ "$target" == \#* ]]; then
+              continue
+            fi
+            test -z "${extra:-}"
+            test -s "$target"
+            [[ "$target" =~ ^module/panel/[a-z0-9]+(-[a-z0-9]+)*\.js$ ]]
+            [[ "$source" == https://* ]]
+            case "${mode:-mirror}" in
+              mirror|web-adblock-main|web-adblock-cnys) ;;
+              *) exit 1 ;;
+            esac
+          done < scripts/module-script-sources.tsv
+
+          for script in \
+            module/panel/ai-check.js \
+            module/panel/flush-dns.js \
+            module/panel/iringo-location-request.js \
+            module/panel/iringo-location-response.js \
+            module/panel/iringo-weatherkit-response.js \
+            module/panel/network-info.js \
+            module/panel/network-interface-info.js \
+            module/panel/network-speed.js \
+            module/panel/stream-media.js \
+            module/panel/web-adblock.js \
+            module/panel/web-adblock-cnys.js; do
+            node --check "$script"
+          done
+
+          npm test
+          git diff --check
+
+      - name: Commit and push changes
+        run: |
+          if [ -z "$(git status --porcelain -- module/panel)" ]; then
+            echo "No upstream module script changes."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add module/panel
+          git commit -m "Sync upstream module scripts"
+          git push
