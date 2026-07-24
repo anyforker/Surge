@@ -86,14 +86,6 @@ https://raw.githubusercontent.com/anyforker/Surge/main/module/iringo-location-se
 https://raw.githubusercontent.com/anyforker/Surge/main/module/iringo-weatherkit.sgmodule
 ```
 
-## 历史模块
-
-[`weibo.sgmodule`](weibo.sgmodule) 是仓库早期保留的独立模块，尚未纳入当前的命名、元数据和自动同步规范。需要使用时请先自行检查内容。
-
-```text
-https://raw.githubusercontent.com/anyforker/Surge/main/module/weibo.sgmodule
-```
-
 ## 脚本来源与更新
 
 模块引用的本地脚本位于 [`panel`](panel)。其中 `ai-check.js` 与 `stream-media.js` 由本仓库维护，其余第三方脚本根据来源清单每日自动同步。
