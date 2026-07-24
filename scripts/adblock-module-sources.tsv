@@ -1,0 +1,6 @@
+# target	source	name	description	author	homepage
+module/app-adblock.sgmodule	https://yfamilys.com/module/adultraplus.sgmodule	应用广告过滤	过滤常用应用的启动页、信息流与弹窗广告	Mixed	https://yfamilys.com
+module/youtube-enhance.sgmodule	https://raw.githubusercontent.com/Maasea/sgmodule/master/YouTube.Enhance.sgmodule	YouTube 增强	增强 YouTube 与 YouTube Music，支持界面精简和字幕翻译	Maasea	https://github.com/Maasea/sgmodule
+module/youtube-adblock.sgmodule	https://yfamilys.com/sgmodule/YouTubeAd.sgmodule	YouTube 去广告	过滤 YouTube 广告并支持画中画与后台播放	Maasea	https://yfamilys.com
+module/wechat-adblock.sgmodule	https://yfamilys.com/module/wechatad.module	微信公众号去广告	过滤微信公众号文章内广告	HotKids, Choler, NobyDa	https://yfamilys.com
+module/weibo-lite-adblock.sgmodule	https://yfamilys.com/sgmodule/weibolitead.module	微博轻享版去广告	过滤微博轻享版启动页、推荐流与趋势页广告	deezertidal	https://yfamilys.com
