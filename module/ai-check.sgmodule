@@ -4,7 +4,7 @@
 #!author=anyforker
 #!homepage=https://github.com/anyforker/Surge
 #!date=2026-07-24
-#!version=1.0.1
+#!version=1.0.2
 #!arguments=UPDATE_INTERVAL:600
 
 [Panel]

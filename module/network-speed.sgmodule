@@ -3,6 +3,8 @@
 #!category=Tools
 #!author=cc63
 #!homepage=https://github.com/cc63/Surge
+#!date=2026-07-24
+#!version=1.0.0
 
 [Panel]
 网络测速 = script-name=Speed,title="网络测速",update-interval=-1

@@ -144,7 +144,7 @@ test("module declares the AI panel and repository-maintained script", () => {
   );
 
   assert.match(moduleSource, /^#!name=AI 可用性检测$/m);
-  assert.match(moduleSource, /^#!version=1\.0\.1$/m);
+  assert.match(moduleSource, /^#!version=1\.0\.2$/m);
   assert.match(moduleSource, /^#!arguments=UPDATE_INTERVAL:600$/m);
   assert.match(moduleSource, /update-interval=\{\{\{UPDATE_INTERVAL\}\}\}/);
   assert.match(

@@ -82,6 +82,8 @@ test("visible panel titles match their module names", () => {
     const panelSection = source.match(/\[Panel\]\n([\s\S]*?)(?=\n\[|$)/)?.[1];
 
     assert.ok(panelSection, moduleName);
+    assert.match(source, /^#!date=\d{4}-\d{2}-\d{2}$/m);
+    assert.match(source, /^#!version=\d+\.\d+\.\d+$/m);
     assert.match(
       panelSection,
       new RegExp(`^${expectedTitle} = .*title="${expectedTitle}"`, "m")

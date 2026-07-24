@@ -3,6 +3,8 @@
 #!category=Tools
 #!author=@xream
 #!homepage=https://github.com/xream/scripts/tree/main/surge/modules/interface-info
+#!date=2026-07-24
+#!version=1.0.0
 #!arguments=STYLE:compact,UPDATE-INTERVAL:1,ICON:wifi.router,ICON-COLOR:#6699FF
 #!arguments-desc=STYLE:\n样式\ncompact 紧凑, normal 常规\n\nUPDATE-INTERVAL:\n面板刷新时间\n您可以在这里指定一个小的时间（例如1），以使面板每次自动更新
 
