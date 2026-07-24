@@ -1,6 +1,8 @@
-# Module scripts
+# 模块脚本
 
 本目录统一使用小写 kebab-case 文件名。模块入口脚本默认与对应 `.sgmodule` 同名；一个模块需要多份脚本时，仅追加用途后缀。
+
+模块安装和使用说明见 [`../README.md`](../README.md)。
 
 ## 本仓库维护
 

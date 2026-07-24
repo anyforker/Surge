@@ -66,8 +66,11 @@ test("all managed module script paths use this repository", () => {
   }
 });
 
-test("README lists every managed module Raw URL", () => {
-  const readme = fs.readFileSync(path.join(root, "README.md"), "utf8");
+test("module README lists every managed module Raw URL", () => {
+  const readme = fs.readFileSync(
+    path.join(moduleDir, "README.md"),
+    "utf8"
+  );
 
   for (const moduleName of modules) {
     assert.match(
@@ -77,6 +80,20 @@ test("README lists every managed module Raw URL", () => {
         "m"
       )
     );
+  }
+});
+
+test("root README routes to each detailed directory guide", () => {
+  const readme = fs.readFileSync(path.join(root, "README.md"), "utf8");
+
+  for (const guide of [
+    "module/README.md",
+    "rule/README.md",
+    "icons/README.md",
+    "scripts/README.md",
+  ]) {
+    assert.match(readme, new RegExp(`\\(${guide.replace("/", "\\/")}\\)`));
+    assert.ok(fs.existsSync(path.join(root, guide)), guide);
   }
 });
 

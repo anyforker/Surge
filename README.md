@@ -1,39 +1,33 @@
 # Surge
 
-Surge 规则、模块、图标与相关维护脚本。
+个人维护的 Surge 资源仓库，集中存放模块、规则集、策略组图标及其自动同步工具。
 
-## Modules
+## 目录导航
 
-模块文件统一使用小写 kebab-case 命名，并按用途归入 `Tools`、`AdBlock`、`Enhancement` 三个类目。
-
-9 个模块使用的 JS 均归档在 [`module/panel`](module/panel)，模块中的 `script-path` 统一指向本仓库。文件名默认与模块名一致；同一模块包含多份脚本时，仅追加 `request`、`response` 等必要后缀。第三方脚本的原始来源与同步说明见 [`module/panel/README.md`](module/panel/README.md)。
-
-第三方模块脚本由 GitHub Actions 每日自动同步；仅在上游内容变化且全部校验通过时提交。
-
-| 类目 | 模块 | 文件 |
+| 目录 | 内容 | 使用说明 |
 | --- | --- | --- |
-| Tools | AI 可用性检测 | [`ai-check.sgmodule`](module/ai-check.sgmodule) |
-| Tools | DNS 缓存清理 | [`flush-dns.sgmodule`](module/flush-dns.sgmodule) |
-| Tools | 网络信息 | [`network-info.sgmodule`](module/network-info.sgmodule) |
-| Tools | 网络接口信息 | [`network-interface-info.sgmodule`](module/network-interface-info.sgmodule) |
-| Tools | 网络测速 | [`network-speed.sgmodule`](module/network-speed.sgmodule) |
-| Tools | 流媒体解锁检测 | [`stream-media.sgmodule`](module/stream-media.sgmodule) |
-| AdBlock | 网页广告过滤 | [`web-adblock.sgmodule`](module/web-adblock.sgmodule) |
-| Enhancement | iRingo 定位服务 | [`iringo-location-service.sgmodule`](module/iringo-location-service.sgmodule) |
-| Enhancement | iRingo WeatherKit | [`iringo-weatherkit.sgmodule`](module/iringo-weatherkit.sgmodule) |
+| [`module`](module) | 9 个规范化模块及 1 个历史模块 | [模块安装与参数说明](module/README.md) |
+| [`rule`](rule) | 自维护规则集与上游规则镜像 | [规则集接入与清单](rule/README.md) |
+| [`icons`](icons) | Surge 策略组 PNG 图标 | [图标引用与文件列表](icons/README.md) |
+| [`scripts`](scripts) | 上游同步脚本与来源清单 | [同步和维护说明](scripts/README.md) |
+| [`tests`](tests) | 模块脚本与资源一致性测试 | 运行 `npm test` |
 
-### 可直接安装地址
+## 快速开始
 
-```text
-https://raw.githubusercontent.com/anyforker/Surge/main/module/ai-check.sgmodule
-https://raw.githubusercontent.com/anyforker/Surge/main/module/flush-dns.sgmodule
-https://raw.githubusercontent.com/anyforker/Surge/main/module/network-info.sgmodule
-https://raw.githubusercontent.com/anyforker/Surge/main/module/network-interface-info.sgmodule
-https://raw.githubusercontent.com/anyforker/Surge/main/module/network-speed.sgmodule
-https://raw.githubusercontent.com/anyforker/Surge/main/module/stream-media.sgmodule
-https://raw.githubusercontent.com/anyforker/Surge/main/module/web-adblock.sgmodule
-https://raw.githubusercontent.com/anyforker/Surge/main/module/iringo-location-service.sgmodule
-https://raw.githubusercontent.com/anyforker/Surge/main/module/iringo-weatherkit.sgmodule
-```
+- 安装模块：进入 [`module/README.md`](module/README.md)，复制对应模块的 Raw 地址。
+- 引用规则：进入 [`rule/README.md`](rule/README.md)，按示例添加 `RULE-SET`。
+- 使用图标：进入 [`icons/README.md`](icons/README.md)，复制图标 Raw 地址作为 `icon-url`。
 
-`weibo.sgmodule` 是仓库中原有的独立模块，本次未调整。
+## 自动更新
+
+仓库通过 GitHub Actions 每日检查上游规则集和第三方模块脚本。只有内容发生变化且校验全部通过时，自动任务才会提交更新。
+
+同步来源、执行方式和维护约定详见 [`scripts/README.md`](scripts/README.md)。
+
+## 仓库约定
+
+- 模块文件使用小写 kebab-case 命名，并按 `Tools`、`AdBlock`、`Enhancement` 分类。
+- 第三方脚本保留原作者与许可信息；本仓库仅做必要的路径规范化和同步镜像。
+- `rule/upstream` 与第三方 Panel 脚本属于自动生成内容，不应直接手动修改。
+
+使用前请根据自己的 Surge 版本、策略组名称和网络环境检查配置。第三方资源的版权与许可归原作者所有。
