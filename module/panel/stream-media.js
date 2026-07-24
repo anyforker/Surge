@@ -42,7 +42,7 @@ const PANEL = {
     );
     $done({ ...PANEL, content: results.map(formatResult).join("\n") });
   } catch (error) {
-    console.log(`[stream-check] unexpected error: ${errorMessage(error)}`);
+    console.log(`[stream-media] unexpected error: ${errorMessage(error)}`);
     $done({ ...PANEL, content: "流媒体检测失败，请刷新面板" });
   }
 })();
@@ -52,7 +52,7 @@ async function runCheck(service, check) {
     return await withTimeout(check(), REQUEST_TIMEOUT);
   } catch (error) {
     const status = error?.code === "TIMEOUT" ? RESULT.TIMEOUT : RESULT.ERROR;
-    console.log(`[stream-check] ${service}: ${errorMessage(error)}`);
+    console.log(`[stream-media] ${service}: ${errorMessage(error)}`);
     return makeResult(service, status);
   }
 }

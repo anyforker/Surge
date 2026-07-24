@@ -6,7 +6,7 @@ const vm = require("node:vm");
 
 const root = path.resolve(__dirname, "..");
 const scriptSource = fs.readFileSync(
-  path.join(root, "module/panel/stream-check.js"),
+  path.join(root, "module/panel/stream-media.js"),
   "utf8"
 );
 
@@ -95,7 +95,7 @@ function runScript(routes) {
       clearTimeout,
     };
 
-    vm.runInNewContext(scriptSource, context, { filename: "stream-check.js" });
+    vm.runInNewContext(scriptSource, context, { filename: "stream-media.js" });
   });
 }
 
@@ -185,7 +185,7 @@ test("module declares a native Surge panel argument", () => {
   assert.match(moduleSource, /update-interval=\{\{\{UPDATE_INTERVAL\}\}\}/);
   assert.match(
     moduleSource,
-    /script-path=https:\/\/raw\.githubusercontent\.com\/anyforker\/Surge\/[0-9a-f]{40}\/module\/panel\/stream-check\.js/
+    /script-path=https:\/\/raw\.githubusercontent\.com\/anyforker\/Surge\/main\/module\/panel\/stream-media\.js/
   );
   assert.doesNotMatch(moduleSource, /script-update-interval=/);
 });
