@@ -1,0 +1,14 @@
+#!name=AI 可用性检测
+#!desc=检测 ChatGPT、Claude、Gemini 和 Grok 的网络与地区可用性
+#!category=Tools
+#!author=anyforker
+#!homepage=https://github.com/anyforker/Surge
+#!date=2026-07-24
+#!version=1.0.1
+#!arguments=UPDATE_INTERVAL:600
+
+[Panel]
+ai-check = script-name=ai-check, title="AI 可用性检测", content="请刷新面板", update-interval={{{UPDATE_INTERVAL}}}
+
+[Script]
+ai-check = type=generic, timeout=10, script-path=https://raw.githubusercontent.com/anyforker/Surge/main/module/panel/ai-check.js

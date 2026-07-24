@@ -1,9 +1,11 @@
 #!name=流媒体解锁检测
-#!desc=Netflix, Disney+, YouTube, Amazon Prime Video Unlock Detection
+#!desc=检测 Netflix、Disney+、YouTube 和 Amazon Prime Video 的区域解锁状态
 #!category=Tools
+#!author=anyforker
+#!homepage=https://github.com/anyforker/Surge
+#!date=2026-07-23
+#!version=2.0
 #!arguments=UPDATE_INTERVAL:600
-# 更新日期：2026.07.23
-# 版本：2.0
 
 [Panel]
 stream-all = script-name=stream-all, title="流媒体解锁检测", content="请刷新面板", update-interval={{{UPDATE_INTERVAL}}}
