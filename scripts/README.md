@@ -10,6 +10,7 @@
 | [`sync-module-scripts.sh`](sync-module-scripts.sh) | 下载并规范化模块脚本 | `module/panel` |
 | [`rule-set-sources.tsv`](rule-set-sources.tsv) | 上游规则来源、目标文件和转换模式 | `rule/upstream/**/*.list` |
 | [`sync-rule-sets.sh`](sync-rule-sets.sh) | 下载、转换并生成规则镜像 | `rule/upstream` |
+| [`build-ai-rule-set.sh`](build-ai-rule-set.sh) | 合并并精确去重 OpenAI、Gemini 与自定义 AI 规则 | `rule/ai.list` |
 
 ## 自动任务
 
@@ -27,6 +28,7 @@
 ```bash
 npm run sync:module-scripts
 bash scripts/sync-rule-sets.sh
+npm run build:ai-rules
 npm test
 ```
 
@@ -53,4 +55,5 @@ npm test
 - `module/panel/ai-check.js` 与 `module/panel/stream-media.js` 由本仓库维护。
 - 清单中列出的模块脚本保留上游逻辑，只做模块正常运行所需的本地路径替换。
 - `rule/upstream` 完全由规则同步脚本生成，文件头会记录来源与处理模式。
+- `rule/ai.list` 由 AI 聚合脚本生成，补充条目维护在 `rule/ai-custom.list`。
 - 第三方资源的许可信息见 [`../module/panel/README.md`](../module/panel/README.md) 及各上游项目。

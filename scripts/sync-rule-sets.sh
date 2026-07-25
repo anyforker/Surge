@@ -109,6 +109,8 @@ while IFS=$'\t' read -r target source mode extra; do
   mv "$tmp_file" "$target"
 done < "$manifest"
 
+bash scripts/build-ai-rule-set.sh
+
 if [ -d rule/upstream ]; then
   while IFS= read -r current_file; do
     if ! grep -Fxq -- "$current_file" "$expected_targets"; then

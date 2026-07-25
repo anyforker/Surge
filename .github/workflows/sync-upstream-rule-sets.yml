@@ -50,16 +50,17 @@ jobs:
                 ;;
             esac
           done < scripts/rule-set-sources.tsv
+          node --test tests/rule-sets.test.js
 
       - name: Commit and push changes
         run: |
-          if git diff --quiet -- rule/upstream; then
+          if git diff --quiet -- rule/upstream rule/ai.list; then
             echo "No upstream rule set changes."
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add rule/upstream
+          git add rule/upstream rule/ai.list
           git commit -m "Sync upstream rule sets"
           git push

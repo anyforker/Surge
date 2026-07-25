@@ -28,6 +28,6 @@
 
 - 模块文件使用小写 kebab-case 命名，并按 `Tools`、`AdBlock`、`Enhancement` 分类。
 - 第三方脚本保留原作者与许可信息；本仓库仅做必要的路径规范化和同步镜像。
-- `rule/upstream` 与第三方 Panel 脚本属于自动生成内容，不应直接手动修改。
+- `rule/upstream`、`rule/ai.list` 与第三方 Panel 脚本属于自动生成内容，不应直接手动修改。
 
 使用前请根据自己的 Surge 版本、策略组名称和网络环境检查配置。第三方资源的版权与许可归原作者所有。
