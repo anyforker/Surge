@@ -9,6 +9,7 @@
 | 文件 | 用途 |
 | --- | --- |
 | `ai-check.js` | AI 可用性检测 |
+| `network-speed.js` | 网络测速（预热、并发分块下载与多次延迟采样） |
 | `stream-media.js` | 流媒体解锁检测 |
 
 ## 上游镜像
@@ -20,7 +21,6 @@
 | `flush-dns.js` | `https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Module/Panel/Flush-DNS/Moore/Flush-DNS.js` |
 | `network-info.js` | `https://raw.githubusercontent.com/xream/scripts/main/surge/modules/network-info/net-lsp-x.js` |
 | `network-interface-info.js` | `https://raw.githubusercontent.com/xream/scripts/main/surge/modules/interface-info/interface-info.js` |
-| `network-speed.js` | `https://raw.githubusercontent.com/cc63/Surge/main/Module/Panel/Speed/Moore/Speed.js` |
 | `iringo-location-request.js` | `https://github.com/NSRingo/LocationService/releases/latest/download/request.bundle.js` |
 | `iringo-location-response.js` | `https://github.com/NSRingo/LocationService/releases/latest/download/response.bundle.js` |
 | `iringo-weatherkit-response.js` | `https://github.com/NSRingo/WeatherKit/releases/latest/download/response.bundle.js` |
@@ -38,4 +38,5 @@
 - xream 脚本沿用 [`GPL-3.0`](licenses/GPL-3.0.txt)。
 - NSRingo 脚本沿用 [`Apache-2.0`](licenses/Apache-2.0.txt)。
 - limbopro 脚本按其源码声明沿用 [`MIT`](licenses/MIT-limbopro.txt)；其中 `web-adblock-user.js` 文件头另行声明 `CC BY-NC-SA 4.0`，以该文件声明为准。
-- Rabbit-Spec 与 cc63 的镜像保留源码内原作者和来源说明；同步时上游仓库未提供独立 `LICENSE` 文件。
+- Rabbit-Spec 镜像保留源码内原作者和来源说明；同步时上游仓库未提供独立 `LICENSE` 文件。
+- `network-speed.js` 基于 cc63 的原始面板思路重写，并保留原作者署名。

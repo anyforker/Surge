@@ -1,13 +1,13 @@
 #!name=网络测速
-#!desc=通过面板测试当前网络的下载速率与延迟
+#!desc=通过当前 Proxy 出口进行预热、并发分块下载与多次延迟采样
 #!category=Tools
-#!author=cc63
-#!homepage=https://github.com/cc63/Surge
-#!date=2026-07-24
-#!version=1.0.0
+#!author=cc63, anyforker
+#!homepage=https://github.com/anyforker/Surge
+#!date=2026-07-26
+#!version=2.0.0
 
 [Panel]
 网络测速 = script-name=Speed,title="网络测速",update-interval=-1
 
 [Script]
-Speed = type=generic,script-path=https://raw.githubusercontent.com/anyforker/Surge/main/module/panel/network-speed.js,argument=title=网络测速&iconfast=bolt&iconmid=hare&iconslow=tortoise&colorlow=#06D6A0&colormid=#FFD166&colorhigh=#EF476F&mb=3
+Speed = type=generic,timeout=30,script-path=https://raw.githubusercontent.com/anyforker/Surge/main/module/panel/network-speed.js,argument=title=网络测速&policy=Proxy&duration=3&min_mb=8&max_mb=64&chunk_mb=2&connections=4&ping_samples=5&warmup_mb=1&speed_slow=80&speed_fast=120&latency_good=150&latency_warn=300&iconfast=bolt&iconmid=hare&iconslow=tortoise&colorlow=#06D6A0&colormid=#FFD166&colorhigh=#EF476F

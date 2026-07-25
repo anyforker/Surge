@@ -44,7 +44,7 @@ https://raw.githubusercontent.com/anyforker/Surge/main/module/network-interface-
 
 ### 网络测速
 
-通过 Panel 测试当前网络的下载速率与延迟。
+通过当前 `Proxy` 出口进行预热、并发分块下载及多次延迟采样。默认手动刷新，每次最多使用约 65 MiB 流量。
 
 ```text
 https://raw.githubusercontent.com/anyforker/Surge/main/module/network-speed.sgmodule
@@ -88,6 +88,6 @@ https://raw.githubusercontent.com/anyforker/Surge/main/module/iringo-weatherkit.
 
 ## 脚本来源与更新
 
-模块引用的本地脚本位于 [`panel`](panel)。其中 `ai-check.js` 与 `stream-media.js` 由本仓库维护，其余第三方脚本根据来源清单每日自动同步。
+模块引用的本地脚本位于 [`panel`](panel)。其中 `ai-check.js`、`network-speed.js` 与 `stream-media.js` 由本仓库维护，其余第三方脚本根据来源清单每日自动同步。
 
 详细的文件映射、上游地址和许可说明见 [`panel/README.md`](panel/README.md)。同步机制见 [`../scripts/README.md`](../scripts/README.md)。

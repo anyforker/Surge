@@ -48,7 +48,11 @@ const expectedScripts = [
   "web-adblock.js",
 ];
 
-const locallyMaintainedScripts = new Set(["ai-check.js", "stream-media.js"]);
+const locallyMaintainedScripts = new Set([
+  "ai-check.js",
+  "network-speed.js",
+  "stream-media.js",
+]);
 
 test("all managed module script paths use this repository", () => {
   const paths = modules.flatMap((moduleName) => {
@@ -154,6 +158,35 @@ test("visible panel titles match their module names", () => {
     const source = fs.readFileSync(path.join(moduleDir, moduleName), "utf8");
     assert.match(source, new RegExp(`argument="?title=${expectedTitle}&`));
   }
+});
+
+test("network speed module uses bounded multi-sample measurements", () => {
+  const moduleSource = fs.readFileSync(
+    path.join(moduleDir, "network-speed.sgmodule"),
+    "utf8"
+  );
+  const scriptSource = fs.readFileSync(
+    path.join(panelDir, "network-speed.js"),
+    "utf8"
+  );
+
+  assert.match(moduleSource, /^#!version=2\.0\.0$/m);
+  assert.match(moduleSource, /Speed = type=generic,timeout=30,/);
+  for (const argument of [
+    "policy=Proxy",
+    "duration=3",
+    "min_mb=8",
+    "max_mb=64",
+    "connections=4",
+    "ping_samples=5",
+  ]) {
+    assert.match(moduleSource, new RegExp(argument));
+  }
+
+  assert.match(scriptSource, /async function measureLatency/);
+  assert.match(scriptSource, /async function measureThroughput/);
+  assert.match(scriptSource, /options\[\'binary-mode\'\] = true/);
+  assert.match(scriptSource, /result\.bytes !== bytes/);
 });
 
 test("web adblock runtime helper scripts use this repository", () => {

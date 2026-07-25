@@ -2,7 +2,6 @@
 module/panel/flush-dns.js	https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Module/Panel/Flush-DNS/Moore/Flush-DNS.js	mirror
 module/panel/network-info.js	https://raw.githubusercontent.com/xream/scripts/main/surge/modules/network-info/net-lsp-x.js	mirror
 module/panel/network-interface-info.js	https://raw.githubusercontent.com/xream/scripts/main/surge/modules/interface-info/interface-info.js	mirror
-module/panel/network-speed.js	https://raw.githubusercontent.com/cc63/Surge/main/Module/Panel/Speed/Moore/Speed.js	mirror
 module/panel/iringo-location-request.js	https://github.com/NSRingo/LocationService/releases/latest/download/request.bundle.js	mirror
 module/panel/iringo-location-response.js	https://github.com/NSRingo/LocationService/releases/latest/download/response.bundle.js	mirror
 module/panel/iringo-weatherkit-response.js	https://github.com/NSRingo/WeatherKit/releases/latest/download/response.bundle.js	mirror
