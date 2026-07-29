@@ -21,6 +21,7 @@ rule/upstream/blackmatrix7/TikTok/TikTok.list	https://raw.githubusercontent.com/
 rule/upstream/blackmatrix7/BiliBili/BiliBili.list	https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/BiliBili/BiliBili.list	mirror
 rule/upstream/blackmatrix7/ChinaMedia/ChinaMedia.list	https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ChinaMedia/ChinaMedia.list	mirror
 rule/upstream/blackmatrix7/GlobalMedia/GlobalMedia_All_No_Resolve.list	https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/GlobalMedia/GlobalMedia_All_No_Resolve.list	mirror
+rule/upstream/blackmatrix7/Emby/Emby.list	https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Emby/Emby.list	mirror
 rule/upstream/blackmatrix7/Proxy/Proxy_All_No_Resolve.list	https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Proxy/Proxy_All_No_Resolve.list	mirror
 rule/upstream/blackmatrix7/ChinaMax/ChinaMax_All.list	https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ChinaMax/ChinaMax_All.list	mirror
 rule/upstream/MetaCubeX/geo/geosite/category-porn.list	https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-porn.list	geosite-domain-suffix

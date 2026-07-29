@@ -8,6 +8,7 @@
 
 ```ini
 RULE-SET,https://raw.githubusercontent.com/anyforker/Surge/main/rule/ai.list,AI
+RULE-SET,https://raw.githubusercontent.com/anyforker/Surge/main/rule/emby.list,Emby
 RULE-SET,https://raw.githubusercontent.com/anyforker/Surge/main/rule/direct.list,DIRECT
 ```
 
@@ -15,11 +16,14 @@ RULE-SET,https://raw.githubusercontent.com/anyforker/Surge/main/rule/direct.list
 
 ## 聚合规则
 
-[`ai.list`](ai.list) 由 Blackmatrix7 OpenAI、EAlyce OpenAI、Blackmatrix7 Gemini 和本仓库补充规则精确去重生成。同步上游规则时会自动重新生成，其中的 ASN 和其他上游规则均原样保留。
+`ai.list` 与 `emby.list` 均由上游镜像和本仓库补充规则自动生成。同步上游规则时会重新生成并精确去重。
 
 | 文件 | 用途 | Raw 地址 |
 | --- | --- | --- |
 | [`ai.list`](ai.list) | OpenAI、Claude、Gemini 等 AI 服务聚合规则 | `https://raw.githubusercontent.com/anyforker/Surge/main/rule/ai.list` |
+| [`emby.list`](emby.list) | 常见 Emby 服务的精确域名规则 | `https://raw.githubusercontent.com/anyforker/Surge/main/rule/emby.list` |
+
+Emby 聚合规则只保留 `DOMAIN` 与 `DOMAIN-SUFFIX`，主动丢弃上游的宽泛关键词、进程名和 IP 段，降低误分流风险。私服线路域名经常变化，未公开或无法验证的 UBD、喜鹊线路不会凭名称猜测；拿到实际服务器 URL 后，可将其域名补充到 `emby-custom.list`。
 
 ## 自维护规则
 
@@ -28,6 +32,7 @@ RULE-SET,https://raw.githubusercontent.com/anyforker/Surge/main/rule/direct.list
 | 文件 | 用途 | Raw 地址 |
 | --- | --- | --- |
 | [`ai-custom.list`](ai-custom.list) | AI 聚合规则的本仓库补充来源 | 不建议单独引用 |
+| [`emby-custom.list`](emby-custom.list) | Emby 聚合规则的本仓库补充来源 | 不建议单独引用 |
 | [`corp.list`](corp.list) | 企业及办公网络相关规则 | `https://raw.githubusercontent.com/anyforker/Surge/main/rule/corp.list` |
 | [`direct.list`](direct.list) | 自定义直连规则 | `https://raw.githubusercontent.com/anyforker/Surge/main/rule/direct.list` |
 
@@ -57,6 +62,7 @@ https://raw.githubusercontent.com/anyforker/Surge/main/rule/upstream/blackmatrix
 https://raw.githubusercontent.com/anyforker/Surge/main/rule/upstream/blackmatrix7/Disney/Disney.list
 https://raw.githubusercontent.com/anyforker/Surge/main/rule/upstream/blackmatrix7/Epic/Epic.list
 https://raw.githubusercontent.com/anyforker/Surge/main/rule/upstream/blackmatrix7/GlobalMedia/GlobalMedia_All_No_Resolve.list
+https://raw.githubusercontent.com/anyforker/Surge/main/rule/upstream/blackmatrix7/Emby/Emby.list
 https://raw.githubusercontent.com/anyforker/Surge/main/rule/upstream/blackmatrix7/Netflix/Netflix.list
 https://raw.githubusercontent.com/anyforker/Surge/main/rule/upstream/blackmatrix7/Nintendo/Nintendo.list
 https://raw.githubusercontent.com/anyforker/Surge/main/rule/upstream/blackmatrix7/Sony/Sony.list
@@ -79,7 +85,7 @@ https://raw.githubusercontent.com/anyforker/Surge/main/rule/upstream/MetaCubeX/g
 
 ## 维护约定
 
-- 自定义规则直接修改本目录顶层的 `.list` 文件；AI 补充条目写入 `ai-custom.list`。
-- `ai.list` 由 `scripts/build-ai-rule-set.sh` 生成，不要直接修改。
+- 自定义规则直接修改本目录顶层的 `.list` 文件；聚合补充条目分别写入 `ai-custom.list` 与 `emby-custom.list`。
+- `ai.list` 与 `emby.list` 由对应聚合脚本生成，不要直接修改。
 - 不要直接编辑 `upstream` 目录；需要新增或变更来源时修改同步清单。
 - 提交前检查规则顺序、重复项和目标策略，避免宽泛规则提前截获流量。
