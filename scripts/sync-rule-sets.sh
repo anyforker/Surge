@@ -110,7 +110,6 @@ while IFS=$'\t' read -r target source mode extra; do
 done < "$manifest"
 
 bash scripts/build-ai-rule-set.sh
-bash scripts/build-emby-rule-set.sh
 
 if [ -d rule/upstream ]; then
   while IFS= read -r current_file; do

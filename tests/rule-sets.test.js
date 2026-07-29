@@ -11,11 +11,7 @@ const sourcePaths = [
   "rule/upstream/blackmatrix7/Gemini/Gemini.list",
   "rule/ai-custom.list",
 ].map((filename) => path.join(root, filename));
-const embyAggregatePath = path.join(root, "rule/emby.list");
-const embySourcePaths = [
-  "rule/upstream/blackmatrix7/Emby/Emby.list",
-  "rule/emby-custom.list",
-].map((filename) => path.join(root, filename));
+const embyPath = path.join(root, "rule/emby.list");
 
 function readRules(filename) {
   return fs
@@ -49,36 +45,6 @@ test("aggregated AI rules retain upstream ASN and Gemini entries", () => {
   }
 });
 
-test("aggregated Emby rules contain only sorted unique exact domains", () => {
-  const expected = [
-    ...new Set(
-      embySourcePaths
-        .flatMap(readRules)
-        .filter((rule) => /^(DOMAIN|DOMAIN-SUFFIX),/.test(rule))
-        .map((rule) => {
-          const [type, domain] = rule.split(",");
-          return `${type.toUpperCase()},${domain.toLowerCase()}`;
-        })
-    ),
-  ].sort();
-  const actual = readRules(embyAggregatePath);
-
-  assert.deepEqual(actual, expected);
-  assert.equal(actual.length, new Set(actual).size);
-  assert.ok(actual.every((rule) => /^(DOMAIN|DOMAIN-SUFFIX),/.test(rule)));
-});
-
-test("aggregated Emby rules retain curated service domains", () => {
-  const rules = new Set(readRules(embyAggregatePath));
-
-  for (const rule of [
-    "DOMAIN-SUFFIX,embyplus.org",
-    "DOMAIN-SUFFIX,misakaf.org",
-    "DOMAIN-SUFFIX,9521732.xyz",
-  ]) {
-    assert.ok(rules.has(rule), rule);
-  }
-
-  assert.ok(![...rules].some((rule) => rule.startsWith("DOMAIN-KEYWORD,")));
-  assert.ok(![...rules].some((rule) => rule.startsWith("PROCESS-NAME,")));
+test("self-maintained Emby rules contain only the configured server", () => {
+  assert.deepEqual(readRules(embyPath), ["DOMAIN,v1.uhdnow.com"]);
 });
