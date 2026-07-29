@@ -45,6 +45,6 @@ test("aggregated AI rules retain upstream ASN and Gemini entries", () => {
   }
 });
 
-test("self-maintained Emby rules contain only the configured server", () => {
-  assert.deepEqual(readRules(embyPath), ["DOMAIN,v1.uhdnow.com"]);
+test("self-maintained Emby rules contain only the configured service domain", () => {
+  assert.deepEqual(readRules(embyPath), ["DOMAIN-SUFFIX,uhdnow.com"]);
 });
