@@ -12,6 +12,10 @@ const sourcePaths = [
   "rule/ai-custom.list",
 ].map((filename) => path.join(root, filename));
 const embyPath = path.join(root, "rule/emby.list");
+const brokerPath = path.join(
+  root,
+  "rule/upstream/Arthur-vx/Broker/Broker.list"
+);
 
 function readRules(filename) {
   return fs
@@ -47,4 +51,18 @@ test("aggregated AI rules retain upstream ASN and Gemini entries", () => {
 
 test("self-maintained Emby rules contain only the configured service domain", () => {
   assert.deepEqual(readRules(embyPath), ["DOMAIN-SUFFIX,uhdnow.com"]);
+});
+
+test("mirrored Broker rules retain Futu and Longbridge coverage", () => {
+  const rules = new Set(readRules(brokerPath));
+
+  for (const rule of [
+    "DOMAIN-SUFFIX,futuhk.com",
+    "DOMAIN-SUFFIX,futunn.com",
+    "DOMAIN-SUFFIX,lbkrs.com",
+    "DOMAIN-SUFFIX,longbridge.com",
+    "DOMAIN,openapi-quote.longbridge.com",
+  ]) {
+    assert.ok(rules.has(rule), rule);
+  }
 });

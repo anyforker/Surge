@@ -68,6 +68,14 @@ https://raw.githubusercontent.com/anyforker/Surge/main/rule/upstream/blackmatrix
 https://raw.githubusercontent.com/anyforker/Surge/main/rule/upstream/blackmatrix7/YouTube/YouTube.list
 ```
 
+### 券商服务
+
+```text
+https://raw.githubusercontent.com/anyforker/Surge/main/rule/upstream/Arthur-vx/Broker/Broker.list
+```
+
+该规则镜像自 Arthur-vx 的券商合集，覆盖富途、Moomoo、长桥、老虎证券与嘉信理财。规则包含域名和 IP 段，建议统一交给稳定的固定出口策略。
+
 ### 通用分流
 
 ```text
