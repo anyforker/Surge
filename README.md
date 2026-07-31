@@ -6,7 +6,7 @@
 
 | 目录 | 内容 | 使用说明 |
 | --- | --- | --- |
-| [`module`](module) | 9 个规范化模块 | [模块安装与参数说明](module/README.md) |
+| [`module`](module) | 10 个规范化模块 | [模块安装与参数说明](module/README.md) |
 | [`rule`](rule) | 自维护规则集与上游规则镜像 | [规则集接入与清单](rule/README.md) |
 | [`icons`](icons) | Surge 策略组 PNG 图标 | [图标引用与文件列表](icons/README.md) |
 | [`scripts`](scripts) | 上游同步脚本与来源清单 | [同步和维护说明](scripts/README.md) |
@@ -20,7 +20,7 @@
 
 ## 自动更新
 
-仓库通过 GitHub Actions 每日检查上游规则集和第三方模块脚本。只有内容发生变化且校验全部通过时，自动任务才会提交更新。
+仓库通过 GitHub Actions 每日检查上游规则集、第三方模块和模块脚本。只有内容发生变化且校验全部通过时，自动任务才会提交更新。
 
 同步来源、执行方式和维护约定详见 [`scripts/README.md`](scripts/README.md)。
 

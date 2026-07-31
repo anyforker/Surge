@@ -11,6 +11,7 @@ const rawBase =
 
 const modules = [
   "ai-check.sgmodule",
+  "app-startup-ad.sgmodule",
   "flush-dns.sgmodule",
   "iringo-location-service.sgmodule",
   "iringo-weatherkit.sgmodule",
@@ -20,6 +21,10 @@ const modules = [
   "stream-media.sgmodule",
   "web-adblock.sgmodule",
 ];
+
+const repositoryManagedScriptModules = modules.filter(
+  (moduleName) => moduleName !== "app-startup-ad.sgmodule"
+);
 
 const panelModules = new Map([
   ["ai-check.sgmodule", "AI 可用性检测"],
@@ -55,7 +60,7 @@ const locallyMaintainedScripts = new Set([
 ]);
 
 test("all managed module script paths use this repository", () => {
-  const paths = modules.flatMap((moduleName) => {
+  const paths = repositoryManagedScriptModules.flatMap((moduleName) => {
     const source = fs.readFileSync(path.join(moduleDir, moduleName), "utf8");
     return [...source.matchAll(/script-path=(https:\/\/[^,\s]+\.js)/g)].map(
       (match) => match[1]
@@ -67,6 +72,31 @@ test("all managed module script paths use this repository", () => {
     assert.ok(scriptPath.startsWith(rawBase), scriptPath);
     const filename = scriptPath.slice(rawBase.length);
     assert.ok(fs.existsSync(path.join(panelDir, filename)), filename);
+  }
+});
+
+test("upstream module mirror has a declared source and required sections", () => {
+  const manifest = fs.readFileSync(
+    path.join(root, "scripts/upstream-module-sources.tsv"),
+    "utf8"
+  );
+  const entries = manifest
+    .split("\n")
+    .filter((line) => line && !line.startsWith("#"));
+
+  assert.deepEqual(entries, [
+    "module/app-startup-ad.sgmodule\thttps://yfamilys.com/module/startingad.sgmodule\tyfamilys-adblock",
+  ]);
+
+  const source = fs.readFileSync(
+    path.join(moduleDir, "app-startup-ad.sgmodule"),
+    "utf8"
+  );
+  assert.match(source, /^#!name=APP启动页去广告$/m);
+  assert.match(source, /^#!category=AdBlock$/m);
+  assert.match(source, /^#!homepage=https:\/\/yfamilys\.com$/m);
+  for (const section of ["URL Rewrite", "Script", "MITM", "Map Local"]) {
+    assert.match(source, new RegExp(`^\\[${section}\\]$`, "m"));
   }
 });
 
