@@ -19,6 +19,7 @@ const modules = [
   "network-info.sgmodule",
   "network-interface-info.sgmodule",
   "network-speed.sgmodule",
+  "spotify-enhancement.sgmodule",
   "stream-media.sgmodule",
   "web-adblock.sgmodule",
   "youtube-adblock.sgmodule",
@@ -27,6 +28,7 @@ const modules = [
 const upstreamModuleMirrors = new Set([
   "app-startup-ad.sgmodule",
   "bilibili-adblock.sgmodule",
+  "spotify-enhancement.sgmodule",
   "youtube-adblock.sgmodule",
 ]);
 const repositoryManagedScriptModules = modules.filter(
@@ -94,6 +96,7 @@ test("upstream module mirror has a declared source and required sections", () =>
   assert.deepEqual(entries, [
     "module/app-startup-ad.sgmodule\thttps://yfamilys.com/module/startingad.sgmodule\tyfamilys-adblock",
     "module/bilibili-adblock.sgmodule\thttps://github.com/BiliUniverse/ADBlock/releases/latest/download/BiliBili.ADBlock.sgmodule\tbiliuniverse-adblock",
+    "module/spotify-enhancement.sgmodule\thttps://raw.githubusercontent.com/app2smile/rules/master/module/spotify.module\tspotify-enhancement",
     "module/youtube-adblock.sgmodule\thttps://raw.githubusercontent.com/Maasea/sgmodule/master/YouTube.Enhance.sgmodule\tyoutube-enhance-adblock",
   ]);
 
@@ -135,6 +138,17 @@ test("upstream module mirror has a declared source and required sections", () =>
     "utf8"
   );
   assert.match(webAdblock, /^#!name=网页广告过滤$/m);
+
+  const spotify = fs.readFileSync(
+    path.join(moduleDir, "spotify-enhancement.sgmodule"),
+    "utf8"
+  );
+  assert.match(spotify, /^#!name=Spotify 功能增强$/m);
+  assert.match(spotify, /^#!category=Enhancement$/m);
+  assert.match(spotify, /spclient\.wg\.spotify\.com/);
+  for (const section of ["Header Rewrite", "Script", "MITM"]) {
+    assert.match(spotify, new RegExp(`^\\[${section}\\]$`, "m"));
+  }
 
   const youtube = fs.readFileSync(
     path.join(moduleDir, "youtube-adblock.sgmodule"),

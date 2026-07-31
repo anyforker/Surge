@@ -1,6 +1,6 @@
 # Surge 模块
 
-本目录包含 12 个规范化模块。模块文件统一使用小写 kebab-case 命名，显示名称、Panel 标题和脚本名称尽量保持一致。
+本目录包含 13 个规范化模块。模块文件统一使用小写 kebab-case 命名，显示名称、Panel 标题和脚本名称尽量保持一致。
 
 ## 安装方法
 
@@ -94,6 +94,14 @@ https://raw.githubusercontent.com/anyforker/Surge/main/module/web-adblock.sgmodu
 
 ## Enhancement
 
+### Spotify 功能增强
+
+镜像 app2smile Spotify 模块，支持去除播放广告、取消强制随机播放并恢复歌手和专辑列表。该模块仅为部分解锁，不能提供超高音质、离线下载等服务端会员功能；建议先登录 Spotify，再启用模块并重启 App。
+
+```text
+https://raw.githubusercontent.com/anyforker/Surge/main/module/spotify-enhancement.sgmodule
+```
+
 ### iRingo 定位服务
 
 自定义 Apple 定位服务区域、调度器及日志等级。默认地区为 `US`，可在安装模块时修改参数。
@@ -112,6 +120,6 @@ https://raw.githubusercontent.com/anyforker/Surge/main/module/iringo-weatherkit.
 
 ## 脚本来源与更新
 
-模块引用的本地脚本位于 [`panel`](panel)。其中 `ai-check.js`、`network-speed.js` 与 `stream-media.js` 由本仓库维护，其余第三方脚本根据来源清单每日自动同步。`app-startup-ad.sgmodule`、`bilibili-adblock.sgmodule` 与 `youtube-adblock.sgmodule` 为上游模块镜像，内部脚本仍从各原始作者地址加载。
+模块引用的本地脚本位于 [`panel`](panel)。其中 `ai-check.js`、`network-speed.js` 与 `stream-media.js` 由本仓库维护，其余第三方脚本根据来源清单每日自动同步。`app-startup-ad.sgmodule`、`bilibili-adblock.sgmodule`、`spotify-enhancement.sgmodule` 与 `youtube-adblock.sgmodule` 为上游模块镜像，内部脚本仍从各原始作者地址加载。
 
 Panel 脚本的文件映射、上游地址和许可说明见 [`panel/README.md`](panel/README.md)；完整模块镜像的来源与同步机制见 [`../scripts/README.md`](../scripts/README.md)。

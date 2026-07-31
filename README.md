@@ -6,7 +6,7 @@
 
 | 目录 | 内容 | 使用说明 |
 | --- | --- | --- |
-| [`module`](module) | 12 个规范化模块 | [模块安装与参数说明](module/README.md) |
+| [`module`](module) | 13 个规范化模块 | [模块安装与参数说明](module/README.md) |
 | [`rule`](rule) | 自维护规则集与上游规则镜像 | [规则集接入与清单](rule/README.md) |
 | [`icons`](icons) | Surge 策略组 PNG 图标 | [图标引用与文件列表](icons/README.md) |
 | [`scripts`](scripts) | 上游同步脚本与来源清单 | [同步和维护说明](scripts/README.md) |

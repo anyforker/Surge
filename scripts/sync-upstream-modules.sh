@@ -43,6 +43,7 @@ validate_module() {
   local target="$1"
   local file="$2"
   local mode="$3"
+  local expected_category=""
   local required_sections=()
 
   if [ ! -s "$file" ]; then
@@ -56,42 +57,52 @@ validate_module() {
   fi
 
   grep -Eq '^#!name[[:space:]]*=' "$file"
-  grep -q '^#!category=AdBlock$' "$file"
   case "$mode" in
     yfamilys-adblock)
       grep -Fqx '#!name=应用广告过滤' "$file"
       grep -q '^#!homepage=https://yfamilys.com$' "$file"
+      expected_category="AdBlock"
       required_sections=("URL Rewrite" "Script" "MITM" "Map Local")
       ;;
     biliuniverse-adblock)
       grep -Fqx '#!name=哔哩哔哩广告过滤' "$file"
       grep -Eqi '^#!homepage[[:space:]]*=[[:space:]]*https://ADBlock\.BiliUniverse\.io$' "$file"
+      expected_category="AdBlock"
       required_sections=("URL Rewrite" "Script" "MITM" "Map Local")
+      ;;
+    spotify-enhancement)
+      grep -Fqx '#!name=Spotify 功能增强' "$file"
+      grep -Fqx '#!desc=2025.06.27 部分解锁premium,音质不能设置为超高(建议登录后再打开脚本,重启app等待脚本生效)' "$file"
+      expected_category="Enhancement"
+      required_sections=("Header Rewrite" "Script" "MITM")
       ;;
     youtube-enhance-adblock)
       grep -Fqx '#!name=YouTube 广告过滤' "$file"
       grep -Fqx '#!desc=适用于 Youtube & Youtube Music' "$file"
+      expected_category="AdBlock"
       required_sections=("Script" "MITM")
       ;;
   esac
+  grep -Fqx "#!category=$expected_category" "$file"
   for section in "${required_sections[@]}"; do
     grep -q "^\\[$section\\]$" "$file"
   done
 }
 
-sync_adblock() {
+sync_module_metadata() {
   local source="$1"
   local display_name="$2"
+  local category="$3"
 
   download "$source" \
-    | awk -v display_name="$display_name" '
+    | awk -v display_name="$display_name" -v category="$category" '
         /^#!name[[:space:]]*=/ {
           print "#!name=" display_name
           next
         }
         /^#!category[[:space:]]*=/ { next }
         { print }
-        /^#!desc[[:space:]]*=/ { print "#!category=AdBlock" }
+        /^#!desc[[:space:]]*=/ { print "#!category=" category }
       '
 }
 
@@ -122,13 +133,16 @@ while IFS=$'\t' read -r target source mode extra; do
       download "$source" > "$tmp_file"
       ;;
     yfamilys-adblock)
-      sync_adblock "$source" "应用广告过滤" > "$tmp_file"
+      sync_module_metadata "$source" "应用广告过滤" "AdBlock" > "$tmp_file"
       ;;
     biliuniverse-adblock)
-      sync_adblock "$source" "哔哩哔哩广告过滤" > "$tmp_file"
+      sync_module_metadata "$source" "哔哩哔哩广告过滤" "AdBlock" > "$tmp_file"
+      ;;
+    spotify-enhancement)
+      sync_module_metadata "$source" "Spotify 功能增强" "Enhancement" > "$tmp_file"
       ;;
     youtube-enhance-adblock)
-      sync_adblock "$source" "YouTube 广告过滤" > "$tmp_file"
+      sync_module_metadata "$source" "YouTube 广告过滤" "AdBlock" > "$tmp_file"
       ;;
     *)
       echo "Unsupported sync mode at line $line_no: $mode" >&2
