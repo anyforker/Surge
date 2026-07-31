@@ -1,2 +1,3 @@
 # target	source	mode
 module/app-startup-ad.sgmodule	https://yfamilys.com/module/startingad.sgmodule	yfamilys-adblock
+module/bilibili-adblock.sgmodule	https://github.com/BiliUniverse/ADBlock/releases/latest/download/BiliBili.ADBlock.sgmodule	biliuniverse-adblock

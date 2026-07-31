@@ -1,6 +1,6 @@
 # Surge 模块
 
-本目录包含 10 个规范化模块。模块文件统一使用小写 kebab-case 命名，显示名称、Panel 标题和脚本名称尽量保持一致。
+本目录包含 11 个规范化模块。模块文件统一使用小写 kebab-case 命名，显示名称、Panel 标题和脚本名称尽量保持一致。
 
 ## 安装方法
 
@@ -60,6 +60,14 @@ https://raw.githubusercontent.com/anyforker/Surge/main/module/stream-media.sgmod
 
 ## AdBlock
 
+### Bilibili 去广告
+
+镜像 BiliUniverse ADBlock，支持去除 Bilibili 的开屏、推荐流、搜索、番剧、直播、动态、视频页和评论广告，并可通过模块参数选择具体功能。适用于 iOS/iPadOS 15 及以上版本，需要启用 MitM、重写和脚本功能。
+
+```text
+https://raw.githubusercontent.com/anyforker/Surge/main/module/bilibili-adblock.sgmodule
+```
+
 ### APP 启动页去广告（融合版）
 
 镜像 yfamilys 自动维护的融合版，覆盖通用开屏广告以及高德地图、菜鸟裹裹、网易云音乐、微博、小红书、喜马拉雅、知乎、酷安等常用应用。模块包含大量第三方远程脚本和 MitM 主机名；请先审查内容，避免与其他大型去广告合集同时启用。
@@ -96,6 +104,6 @@ https://raw.githubusercontent.com/anyforker/Surge/main/module/iringo-weatherkit.
 
 ## 脚本来源与更新
 
-模块引用的本地脚本位于 [`panel`](panel)。其中 `ai-check.js`、`network-speed.js` 与 `stream-media.js` 由本仓库维护，其余第三方脚本根据来源清单每日自动同步。`app-startup-ad.sgmodule` 为上游模块镜像，内部脚本仍从各原始作者地址加载。
+模块引用的本地脚本位于 [`panel`](panel)。其中 `ai-check.js`、`network-speed.js` 与 `stream-media.js` 由本仓库维护，其余第三方脚本根据来源清单每日自动同步。`app-startup-ad.sgmodule` 与 `bilibili-adblock.sgmodule` 为上游模块镜像，内部脚本仍从各原始作者地址加载。
 
 Panel 脚本的文件映射、上游地址和许可说明见 [`panel/README.md`](panel/README.md)；完整模块镜像的来源与同步机制见 [`../scripts/README.md`](../scripts/README.md)。

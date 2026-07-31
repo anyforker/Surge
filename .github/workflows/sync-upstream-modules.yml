@@ -27,7 +27,7 @@ jobs:
         run: |
           bash -n scripts/sync-upstream-modules.sh
           awk -F '\t' 'NF && $1 !~ /^#/ { count[$1]++ } END { for (target in count) if (count[target] > 1) { print target; bad=1 } exit bad }' scripts/upstream-module-sources.tsv
-          test "$(awk -F '\t' 'NF && $1 !~ /^#/ { count++ } END { print count+0 }' scripts/upstream-module-sources.tsv)" -eq 1
+          test "$(awk -F '\t' 'NF && $1 !~ /^#/ { count++ } END { print count+0 }' scripts/upstream-module-sources.tsv)" -eq 2
 
           while IFS=$'\t' read -r target source mode extra; do
             if [ -z "${target:-}" ] || [[ "$target" == \#* ]]; then
@@ -38,7 +38,7 @@ jobs:
             [[ "$target" =~ ^module/[a-z0-9]+(-[a-z0-9]+)*\.sgmodule$ ]]
             [[ "$source" == https://* ]]
             case "${mode:-mirror}" in
-              mirror|yfamilys-adblock) ;;
+              mirror|yfamilys-adblock|biliuniverse-adblock) ;;
               *) exit 1 ;;
             esac
           done < scripts/upstream-module-sources.tsv

@@ -37,6 +37,7 @@ npm test
 ```
 
 同步命令会访问清单中的上游地址并修改生成目录。运行前应确保工作区中没有未保存的同路径改动，运行后使用版本差异检查上游变更内容。
+如需只同步一个完整模块，可在命令前设置 `SYNC_TARGET=module/文件名.sgmodule`。
 
 ## 清单格式
 
@@ -58,6 +59,7 @@ npm test
 
 - `module/panel/ai-check.js` 与 `module/panel/stream-media.js` 由本仓库维护。
 - `module/app-startup-ad.sgmodule` 同步自 yfamilys，仅补充仓库统一使用的 `AdBlock` 类目，保留上游模块内的作者信息和第三方脚本地址；上游未提供统一许可声明。
+- `module/bilibili-adblock.sgmodule` 同步自 BiliUniverse ADBlock，仅将类目统一为 `AdBlock`，其余内容及版本化脚本地址保持上游原样；上游使用 Apache-2.0 许可证。
 - 清单中列出的模块脚本保留上游逻辑，只做模块正常运行所需的本地路径替换。
 - `rule/upstream` 完全由规则同步脚本生成，文件头会记录来源与处理模式。
 - `rule/ai.list` 由 AI 聚合脚本生成，补充条目维护在 `rule/ai-custom.list`。

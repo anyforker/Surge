@@ -12,6 +12,7 @@ const rawBase =
 const modules = [
   "ai-check.sgmodule",
   "app-startup-ad.sgmodule",
+  "bilibili-adblock.sgmodule",
   "flush-dns.sgmodule",
   "iringo-location-service.sgmodule",
   "iringo-weatherkit.sgmodule",
@@ -22,8 +23,12 @@ const modules = [
   "web-adblock.sgmodule",
 ];
 
+const upstreamModuleMirrors = new Set([
+  "app-startup-ad.sgmodule",
+  "bilibili-adblock.sgmodule",
+]);
 const repositoryManagedScriptModules = modules.filter(
-  (moduleName) => moduleName !== "app-startup-ad.sgmodule"
+  (moduleName) => !upstreamModuleMirrors.has(moduleName)
 );
 
 const panelModules = new Map([
@@ -86,6 +91,7 @@ test("upstream module mirror has a declared source and required sections", () =>
 
   assert.deepEqual(entries, [
     "module/app-startup-ad.sgmodule\thttps://yfamilys.com/module/startingad.sgmodule\tyfamilys-adblock",
+    "module/bilibili-adblock.sgmodule\thttps://github.com/BiliUniverse/ADBlock/releases/latest/download/BiliBili.ADBlock.sgmodule\tbiliuniverse-adblock",
   ]);
 
   const source = fs.readFileSync(
@@ -97,6 +103,22 @@ test("upstream module mirror has a declared source and required sections", () =>
   assert.match(source, /^#!homepage=https:\/\/yfamilys\.com$/m);
   for (const section of ["URL Rewrite", "Script", "MITM", "Map Local"]) {
     assert.match(source, new RegExp(`^\\[${section}\\]$`, "m"));
+  }
+
+  const bilibili = fs.readFileSync(
+    path.join(moduleDir, "bilibili-adblock.sgmodule"),
+    "utf8"
+  );
+  assert.match(bilibili, /^#!name\s*=\s*📺 BiliBili: 🛡️ ADBlock$/m);
+  assert.match(bilibili, /^#!category=AdBlock$/m);
+  assert.match(
+    bilibili,
+    /^#!homepage\s*=\s*https:\/\/ADBlock\.BiliUniverse\.io$/m
+  );
+  assert.match(bilibili, /app\.bilibili\.com/);
+  assert.match(bilibili, /grpc\.biliapi\.net/);
+  for (const section of ["URL Rewrite", "Map Local", "Body Rewrite", "Script", "MITM"]) {
+    assert.match(bilibili, new RegExp(`^\\[${section}\\]$`, "m"));
   }
 });
 

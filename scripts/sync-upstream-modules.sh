@@ -20,20 +20,29 @@ if [ -n "$duplicate_targets" ]; then
 fi
 
 download() {
-  curl \
-    -L \
-    --fail \
-    --silent \
-    --show-error \
-    --max-time 120 \
-    --user-agent "Mozilla/5.0" \
-    --referer "https://yfamilys.com/surge" \
-    "$1"
+  local source="$1"
+  local curl_args=(
+    -L
+    --fail
+    --silent
+    --show-error
+    --max-time 120
+  )
+
+  if [[ "$source" == https://yfamilys.com/* ]]; then
+    curl_args+=(
+      --user-agent "Mozilla/5.0"
+      --referer "https://yfamilys.com/surge"
+    )
+  fi
+
+  curl "${curl_args[@]}" "$source"
 }
 
 validate_module() {
   local target="$1"
   local file="$2"
+  local mode="$3"
 
   if [ ! -s "$file" ]; then
     echo "Downloaded empty module: $target" >&2
@@ -45,23 +54,29 @@ validate_module() {
     exit 1
   fi
 
-  grep -q '^#!name=' "$file"
+  grep -Eq '^#!name[[:space:]]*=' "$file"
   grep -q '^#!category=AdBlock$' "$file"
-  grep -q '^#!homepage=https://yfamilys.com$' "$file"
-  grep -q '^\[URL Rewrite\]$' "$file"
-  grep -q '^\[Script\]$' "$file"
-  grep -q '^\[MITM\]$' "$file"
-  grep -q '^\[Map Local\]$' "$file"
+  case "$mode" in
+    yfamilys-adblock)
+      grep -q '^#!homepage=https://yfamilys.com$' "$file"
+      ;;
+    biliuniverse-adblock)
+      grep -Eqi '^#!homepage[[:space:]]*=[[:space:]]*https://ADBlock\.BiliUniverse\.io$' "$file"
+      ;;
+  esac
+  for section in "URL Rewrite" "Script" "MITM" "Map Local"; do
+    grep -q "^\\[$section\\]$" "$file"
+  done
 }
 
-sync_yfamilys_adblock() {
+sync_adblock() {
   local source="$1"
 
   download "$source" \
     | awk '
-        /^#!category=/ { next }
+        /^#!category[[:space:]]*=/ { next }
         { print }
-        /^#!desc=/ { print "#!category=AdBlock" }
+        /^#!desc[[:space:]]*=/ { print "#!category=AdBlock" }
       '
 }
 
@@ -71,6 +86,10 @@ while IFS=$'\t' read -r target source mode extra; do
   line_no=$((line_no + 1))
 
   if [ -z "${target:-}" ] || [[ "$target" == \#* ]]; then
+    continue
+  fi
+
+  if [ -n "${SYNC_TARGET:-}" ] && [ "$target" != "$SYNC_TARGET" ]; then
     continue
   fi
 
@@ -87,15 +106,15 @@ while IFS=$'\t' read -r target source mode extra; do
     mirror)
       download "$source" > "$tmp_file"
       ;;
-    yfamilys-adblock)
-      sync_yfamilys_adblock "$source" > "$tmp_file"
+    yfamilys-adblock|biliuniverse-adblock)
+      sync_adblock "$source" > "$tmp_file"
       ;;
     *)
       echo "Unsupported sync mode at line $line_no: $mode" >&2
       exit 1
       ;;
   esac
-  validate_module "$target" "$tmp_file"
+  validate_module "$target" "$tmp_file" "$mode"
 
   if [ -f "$target" ] && cmp -s "$tmp_file" "$target"; then
     continue
