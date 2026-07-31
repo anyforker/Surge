@@ -21,11 +21,13 @@ const modules = [
   "network-speed.sgmodule",
   "stream-media.sgmodule",
   "web-adblock.sgmodule",
+  "youtube-adblock.sgmodule",
 ];
 
 const upstreamModuleMirrors = new Set([
   "app-startup-ad.sgmodule",
   "bilibili-adblock.sgmodule",
+  "youtube-adblock.sgmodule",
 ]);
 const repositoryManagedScriptModules = modules.filter(
   (moduleName) => !upstreamModuleMirrors.has(moduleName)
@@ -92,6 +94,7 @@ test("upstream module mirror has a declared source and required sections", () =>
   assert.deepEqual(entries, [
     "module/app-startup-ad.sgmodule\thttps://yfamilys.com/module/startingad.sgmodule\tyfamilys-adblock",
     "module/bilibili-adblock.sgmodule\thttps://github.com/BiliUniverse/ADBlock/releases/latest/download/BiliBili.ADBlock.sgmodule\tbiliuniverse-adblock",
+    "module/youtube-adblock.sgmodule\thttps://raw.githubusercontent.com/Maasea/sgmodule/master/YouTube.Enhance.sgmodule\tyoutube-enhance-adblock",
   ]);
 
   const source = fs.readFileSync(
@@ -132,6 +135,18 @@ test("upstream module mirror has a declared source and required sections", () =>
     "utf8"
   );
   assert.match(webAdblock, /^#!name=网页广告过滤$/m);
+
+  const youtube = fs.readFileSync(
+    path.join(moduleDir, "youtube-adblock.sgmodule"),
+    "utf8"
+  );
+  assert.match(youtube, /^#!name=YouTube 广告过滤$/m);
+  assert.match(youtube, /^#!category=AdBlock$/m);
+  assert.match(youtube, /youtubei\.googleapis\.com/);
+  assert.match(youtube, /\*\.googlevideo\.com/);
+  for (const section of ["Script", "MITM"]) {
+    assert.match(youtube, new RegExp(`^\\[${section}\\]$`, "m"));
+  }
 });
 
 test("module README lists every managed module Raw URL", () => {

@@ -43,6 +43,7 @@ validate_module() {
   local target="$1"
   local file="$2"
   local mode="$3"
+  local required_sections=()
 
   if [ ! -s "$file" ]; then
     echo "Downloaded empty module: $target" >&2
@@ -60,13 +61,20 @@ validate_module() {
     yfamilys-adblock)
       grep -Fqx '#!name=应用广告过滤' "$file"
       grep -q '^#!homepage=https://yfamilys.com$' "$file"
+      required_sections=("URL Rewrite" "Script" "MITM" "Map Local")
       ;;
     biliuniverse-adblock)
       grep -Fqx '#!name=哔哩哔哩广告过滤' "$file"
       grep -Eqi '^#!homepage[[:space:]]*=[[:space:]]*https://ADBlock\.BiliUniverse\.io$' "$file"
+      required_sections=("URL Rewrite" "Script" "MITM" "Map Local")
+      ;;
+    youtube-enhance-adblock)
+      grep -Fqx '#!name=YouTube 广告过滤' "$file"
+      grep -Fqx '#!desc=适用于 Youtube & Youtube Music' "$file"
+      required_sections=("Script" "MITM")
       ;;
   esac
-  for section in "URL Rewrite" "Script" "MITM" "Map Local"; do
+  for section in "${required_sections[@]}"; do
     grep -q "^\\[$section\\]$" "$file"
   done
 }
@@ -118,6 +126,9 @@ while IFS=$'\t' read -r target source mode extra; do
       ;;
     biliuniverse-adblock)
       sync_adblock "$source" "哔哩哔哩广告过滤" > "$tmp_file"
+      ;;
+    youtube-enhance-adblock)
+      sync_adblock "$source" "YouTube 广告过滤" > "$tmp_file"
       ;;
     *)
       echo "Unsupported sync mode at line $line_no: $mode" >&2
