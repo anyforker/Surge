@@ -58,8 +58,8 @@ npm test
 ## 内容归属
 
 - `module/panel/ai-check.js` 与 `module/panel/stream-media.js` 由本仓库维护。
-- `module/app-startup-ad.sgmodule` 同步自 yfamilys，仅补充仓库统一使用的 `AdBlock` 类目，保留上游模块内的作者信息和第三方脚本地址；上游未提供统一许可声明。
-- `module/bilibili-adblock.sgmodule` 同步自 BiliUniverse ADBlock，仅将类目统一为 `AdBlock`，其余内容及版本化脚本地址保持上游原样；上游使用 Apache-2.0 许可证。
+- `module/app-startup-ad.sgmodule` 同步自 yfamilys，仅统一展示名与 `AdBlock` 类目，保留上游模块内的作者信息和第三方脚本地址；上游未提供统一许可声明。
+- `module/bilibili-adblock.sgmodule` 同步自 BiliUniverse ADBlock，仅统一展示名与 `AdBlock` 类目，其余内容及版本化脚本地址保持上游原样；上游使用 Apache-2.0 许可证。
 - 清单中列出的模块脚本保留上游逻辑，只做模块正常运行所需的本地路径替换。
 - `rule/upstream` 完全由规则同步脚本生成，文件头会记录来源与处理模式。
 - `rule/ai.list` 由 AI 聚合脚本生成，补充条目维护在 `rule/ai-custom.list`。

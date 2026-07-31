@@ -60,7 +60,7 @@ https://raw.githubusercontent.com/anyforker/Surge/main/module/stream-media.sgmod
 
 ## AdBlock
 
-### Bilibili 去广告
+### 哔哩哔哩广告过滤
 
 镜像 BiliUniverse ADBlock，支持去除 Bilibili 的开屏、推荐流、搜索、番剧、直播、动态、视频页和评论广告，并可通过模块参数选择具体功能。适用于 iOS/iPadOS 15 及以上版本，需要启用 MitM、重写和脚本功能。
 
@@ -68,7 +68,7 @@ https://raw.githubusercontent.com/anyforker/Surge/main/module/stream-media.sgmod
 https://raw.githubusercontent.com/anyforker/Surge/main/module/bilibili-adblock.sgmodule
 ```
 
-### APP 启动页去广告（融合版）
+### 应用广告过滤（融合版）
 
 镜像 yfamilys 自动维护的融合版，覆盖通用开屏广告以及高德地图、菜鸟裹裹、网易云音乐、微博、小红书、喜马拉雅、知乎、酷安等常用应用。模块包含大量第三方远程脚本和 MitM 主机名；请先审查内容，避免与其他大型去广告合集同时启用。
 

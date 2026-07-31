@@ -98,7 +98,7 @@ test("upstream module mirror has a declared source and required sections", () =>
     path.join(moduleDir, "app-startup-ad.sgmodule"),
     "utf8"
   );
-  assert.match(source, /^#!name=APP启动页去广告$/m);
+  assert.match(source, /^#!name=应用广告过滤$/m);
   assert.match(source, /^#!category=AdBlock$/m);
   assert.match(source, /^#!homepage=https:\/\/yfamilys\.com$/m);
   for (const section of ["URL Rewrite", "Script", "MITM", "Map Local"]) {
@@ -109,7 +109,7 @@ test("upstream module mirror has a declared source and required sections", () =>
     path.join(moduleDir, "bilibili-adblock.sgmodule"),
     "utf8"
   );
-  assert.match(bilibili, /^#!name\s*=\s*📺 BiliBili: 🛡️ ADBlock$/m);
+  assert.match(bilibili, /^#!name=哔哩哔哩广告过滤$/m);
   assert.match(bilibili, /^#!category=AdBlock$/m);
   assert.match(
     bilibili,
@@ -117,9 +117,21 @@ test("upstream module mirror has a declared source and required sections", () =>
   );
   assert.match(bilibili, /app\.bilibili\.com/);
   assert.match(bilibili, /grpc\.biliapi\.net/);
-  for (const section of ["URL Rewrite", "Map Local", "Body Rewrite", "Script", "MITM"]) {
+  for (const section of [
+    "URL Rewrite",
+    "Map Local",
+    "Body Rewrite",
+    "Script",
+    "MITM",
+  ]) {
     assert.match(bilibili, new RegExp(`^\\[${section}\\]$`, "m"));
   }
+
+  const webAdblock = fs.readFileSync(
+    path.join(moduleDir, "web-adblock.sgmodule"),
+    "utf8"
+  );
+  assert.match(webAdblock, /^#!name=网页广告过滤$/m);
 });
 
 test("module README lists every managed module Raw URL", () => {

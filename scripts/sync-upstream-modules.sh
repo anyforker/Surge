@@ -58,9 +58,11 @@ validate_module() {
   grep -q '^#!category=AdBlock$' "$file"
   case "$mode" in
     yfamilys-adblock)
+      grep -Fqx '#!name=应用广告过滤' "$file"
       grep -q '^#!homepage=https://yfamilys.com$' "$file"
       ;;
     biliuniverse-adblock)
+      grep -Fqx '#!name=哔哩哔哩广告过滤' "$file"
       grep -Eqi '^#!homepage[[:space:]]*=[[:space:]]*https://ADBlock\.BiliUniverse\.io$' "$file"
       ;;
   esac
@@ -71,9 +73,14 @@ validate_module() {
 
 sync_adblock() {
   local source="$1"
+  local display_name="$2"
 
   download "$source" \
-    | awk '
+    | awk -v display_name="$display_name" '
+        /^#!name[[:space:]]*=/ {
+          print "#!name=" display_name
+          next
+        }
         /^#!category[[:space:]]*=/ { next }
         { print }
         /^#!desc[[:space:]]*=/ { print "#!category=AdBlock" }
@@ -106,8 +113,11 @@ while IFS=$'\t' read -r target source mode extra; do
     mirror)
       download "$source" > "$tmp_file"
       ;;
-    yfamilys-adblock|biliuniverse-adblock)
-      sync_adblock "$source" > "$tmp_file"
+    yfamilys-adblock)
+      sync_adblock "$source" "应用广告过滤" > "$tmp_file"
+      ;;
+    biliuniverse-adblock)
+      sync_adblock "$source" "哔哩哔哩广告过滤" > "$tmp_file"
       ;;
     *)
       echo "Unsupported sync mode at line $line_no: $mode" >&2
