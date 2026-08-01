@@ -21,12 +21,18 @@ fi
 
 download() {
   local source="$1"
+  local output="$2"
   local curl_args=(
     -L
     --fail
     --silent
     --show-error
+    --connect-timeout 20
     --max-time 120
+    --retry 3
+    --retry-all-errors
+    --retry-delay 3
+    --retry-max-time 30
   )
 
   if [[ "$source" == https://yfamilys.com/* ]]; then
@@ -36,7 +42,7 @@ download() {
     )
   fi
 
-  curl "${curl_args[@]}" "$source"
+  curl "${curl_args[@]}" --output "$output" "$source"
 }
 
 validate_module() {
@@ -90,23 +96,23 @@ validate_module() {
 }
 
 sync_module_metadata() {
-  local source="$1"
+  local source_file="$1"
   local display_name="$2"
   local category="$3"
 
-  download "$source" \
-    | awk -v display_name="$display_name" -v category="$category" '
-        /^#!name[[:space:]]*=/ {
-          print "#!name=" display_name
-          next
-        }
-        /^#!category[[:space:]]*=/ { next }
-        { print }
-        /^#!desc[[:space:]]*=/ { print "#!category=" category }
-      '
+  awk -v display_name="$display_name" -v category="$category" '
+      /^#!name[[:space:]]*=/ {
+        print "#!name=" display_name
+        next
+      }
+      /^#!category[[:space:]]*=/ { next }
+      { print }
+      /^#!desc[[:space:]]*=/ { print "#!category=" category }
+    ' "$source_file"
 }
 
 changed=0
+preserved=0
 line_no=0
 while IFS=$'\t' read -r target source mode extra; do
   line_no=$((line_no + 1))
@@ -127,22 +133,39 @@ while IFS=$'\t' read -r target source mode extra; do
     exit 1
   fi
 
+  printf 'Syncing %s <- %s\n' "$target" "$source"
+  raw_file="$tmp_dir/$(basename "$target").upstream"
   tmp_file="$tmp_dir/$(basename "$target")"
+  if ! download "$source" "$raw_file"; then
+    if [ -s "$target" ]; then
+      printf 'Warning: failed to download %s; preserving %s\n' "$source" "$target" >&2
+      if [ "${GITHUB_ACTIONS:-}" = "true" ]; then
+        printf '::warning file=%s,line=%d::Failed to download %s after retries; preserving the existing %s\n' \
+          "$manifest" "$line_no" "$source" "$target"
+      fi
+      preserved=$((preserved + 1))
+      continue
+    fi
+
+    printf 'Download failed and no existing module can be preserved: %s\n' "$target" >&2
+    exit 1
+  fi
+
   case "$mode" in
     mirror)
-      download "$source" > "$tmp_file"
+      cp "$raw_file" "$tmp_file"
       ;;
     yfamilys-adblock)
-      sync_module_metadata "$source" "应用广告过滤" "AdBlock" > "$tmp_file"
+      sync_module_metadata "$raw_file" "应用广告过滤" "AdBlock" > "$tmp_file"
       ;;
     biliuniverse-adblock)
-      sync_module_metadata "$source" "哔哩哔哩广告过滤" "AdBlock" > "$tmp_file"
+      sync_module_metadata "$raw_file" "哔哩哔哩广告过滤" "AdBlock" > "$tmp_file"
       ;;
     spotify-enhancement)
-      sync_module_metadata "$source" "Spotify 功能增强" "Enhancement" > "$tmp_file"
+      sync_module_metadata "$raw_file" "Spotify 功能增强" "Enhancement" > "$tmp_file"
       ;;
     youtube-enhance-adblock)
-      sync_module_metadata "$source" "YouTube 广告过滤" "AdBlock" > "$tmp_file"
+      sync_module_metadata "$raw_file" "YouTube 广告过滤" "AdBlock" > "$tmp_file"
       ;;
     *)
       echo "Unsupported sync mode at line $line_no: $mode" >&2
@@ -162,3 +185,4 @@ while IFS=$'\t' read -r target source mode extra; do
 done < "$manifest"
 
 printf 'Updated modules: %d\n' "$changed"
+printf 'Preserved modules after download failures: %d\n' "$preserved"

@@ -22,7 +22,7 @@
 | 模块脚本同步 | 每日 01:30 | [`.github/workflows/sync-upstream-module-scripts.yml`](../.github/workflows/sync-upstream-module-scripts.yml) |
 | 完整模块同步 | 每日 02:00 | [`.github/workflows/sync-upstream-modules.yml`](../.github/workflows/sync-upstream-modules.yml) |
 
-任务支持在 GitHub Actions 中手动触发。同步完成后会先执行格式、路径和测试校验；没有内容变化时不会产生空提交。
+任务支持在 GitHub Actions 中手动触发。同步完成后会先执行格式、路径和测试校验；没有内容变化时不会产生空提交。完整模块下载会自动重试；若上游仍不可用但仓库已有对应模块，则保留现有版本、记录 GitHub Actions 警告并继续同步其余模块。首次新增的模块下载失败时仍会终止任务。
 
 ## 本地运行
 
