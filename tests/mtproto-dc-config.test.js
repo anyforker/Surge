@@ -4,13 +4,12 @@ const net = require("node:net");
 const path = require("node:path");
 const test = require("node:test");
 const {
-  expandIPv6,
+  compressIPv6,
   normalizeConfig,
 } = require("../scripts/normalize-mtproto-dc-config.js");
 
 const root = path.resolve(__dirname, "..");
 const configPath = path.join(root, "config/mtproto-dc-config.json");
-const fullIPv6Pattern = /^(?:[0-9a-f]{4}:){7}[0-9a-f]{4}$/;
 
 test("MTProto config source is declared in the config manifest", () => {
   const manifest = fs.readFileSync(
@@ -22,22 +21,26 @@ test("MTProto config source is declared in the config manifest", () => {
     .filter((line) => line && !line.startsWith("#"));
 
   assert.deepEqual(entries, [
-    "config/mtproto-dc-config.json\thttps://raw.githubusercontent.com/surge-networks/MTProtoDCConfigGenerator/refs/heads/main/mtproto-dc-config.json\texpand-ipv6",
+    "config/mtproto-dc-config.json\thttps://raw.githubusercontent.com/surge-networks/MTProtoDCConfigGenerator/refs/heads/main/mtproto-dc-config.json\tcompress-ipv6",
   ]);
 });
 
-test("expands compressed and embedded-IPv4 IPv6 addresses", () => {
+test("canonicalizes compressed, expanded, and embedded-IPv4 IPv6 addresses", () => {
   assert.equal(
-    expandIPv6("2001:b28:f23d:f001::a"),
-    "2001:0b28:f23d:f001:0000:0000:0000:000a"
+    compressIPv6("2001:b28:f23d:f001::a"),
+    "2001:b28:f23d:f001::a"
   );
   assert.equal(
-    expandIPv6("::ffff:192.0.2.1"),
-    "0000:0000:0000:0000:0000:ffff:c000:0201"
+    compressIPv6("::ffff:192.0.2.1"),
+    "::ffff:c000:201"
   );
   assert.equal(
-    expandIPv6("2001:0db8:0000:0000:0000:0000:0000:0001"),
-    "2001:0db8:0000:0000:0000:0000:0000:0001"
+    compressIPv6("2001:0db8:0000:0000:0000:0000:0000:0001"),
+    "2001:db8::1"
+  );
+  assert.equal(
+    compressIPv6("2001:0:0:1:0:0:1:1"),
+    "2001::1:0:0:1:1"
   );
 });
 
@@ -56,7 +59,7 @@ test("normalizes only IPv6 endpoint values", () => {
       { id: 1, ip: "149.154.175.50", port: 443 },
       {
         id: 1,
-        ip: "2001:0b28:f23d:f001:0000:0000:0000:000a",
+        ip: "2001:b28:f23d:f001::a",
         port: 443,
       },
     ],
@@ -76,8 +79,8 @@ test("published MTProto config contains only canonical IP addresses", () => {
     assert.ok(family === 4 || family === 6, option.ip);
     if (family === 6) {
       ipv6Count += 1;
-      assert.match(option.ip, fullIPv6Pattern);
-      assert.equal(option.ip.includes("::"), false);
+      assert.equal(option.ip, compressIPv6(option.ip));
+      assert.equal(option.ip, option.ip.toLowerCase());
     }
   }
   assert.ok(ipv6Count > 0);

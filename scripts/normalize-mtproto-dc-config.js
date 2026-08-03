@@ -14,7 +14,7 @@ function expandIPv4Tail(address) {
   return `${address.slice(0, separator + 1)}${high}:${low}`;
 }
 
-function expandIPv6(address) {
+function parseIPv6Groups(address) {
   if (net.isIP(address) !== 6) {
     throw new Error(`Invalid IPv6 address: ${address}`);
   }
@@ -42,7 +42,39 @@ function expandIPv6(address) {
     throw new Error(`Invalid IPv6 groups: ${address}`);
   }
 
-  return groups.map((group) => group.padStart(4, "0")).join(":");
+  return groups.map((group) => Number.parseInt(group, 16).toString(16));
+}
+
+function compressIPv6(address) {
+  const groups = parseIPv6Groups(address);
+  let longestStart = -1;
+  let longestLength = 0;
+
+  for (let index = 0; index < groups.length; ) {
+    if (groups[index] !== "0") {
+      index += 1;
+      continue;
+    }
+
+    let end = index;
+    while (end < groups.length && groups[end] === "0") {
+      end += 1;
+    }
+    const length = end - index;
+    if (length >= 2 && length > longestLength) {
+      longestStart = index;
+      longestLength = length;
+    }
+    index = end;
+  }
+
+  if (longestStart === -1) {
+    return groups.join(":");
+  }
+
+  const left = groups.slice(0, longestStart).join(":");
+  const right = groups.slice(longestStart + longestLength).join(":");
+  return `${left}::${right}`;
 }
 
 function normalizeConfig(config) {
@@ -65,7 +97,7 @@ function normalizeConfig(config) {
     }
 
     ipv6Count += 1;
-    return { ...option, ip: expandIPv6(option.ip) };
+    return { ...option, ip: compressIPv6(option.ip) };
   });
 
   if (ipv6Count === 0) {
@@ -86,4 +118,4 @@ if (require.main === module) {
   }
 }
 
-module.exports = { expandIPv6, normalizeConfig };
+module.exports = { compressIPv6, normalizeConfig };

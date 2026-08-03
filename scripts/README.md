@@ -15,7 +15,7 @@
 | [`build-ai-rule-set.sh`](build-ai-rule-set.sh) | 合并并精确去重 OpenAI、Gemini 与自定义 AI 规则 | `rule/ai.list` |
 | [`config-sources.tsv`](config-sources.tsv) | 第三方配置来源、目标文件和转换模式 | `config/*.json` |
 | [`sync-mtproto-dc-config.sh`](sync-mtproto-dc-config.sh) | 下载并规范化 MTProto 数据中心配置 | `config/mtproto-dc-config.json` |
-| [`normalize-mtproto-dc-config.js`](normalize-mtproto-dc-config.js) | 将 MTProto 配置中的 IPv6 地址展开为完整格式 | 标准输出 |
+| [`normalize-mtproto-dc-config.js`](normalize-mtproto-dc-config.js) | 将 MTProto 配置中的 IPv6 地址转换为规范简写 | 标准输出 |
 
 ## 自动任务
 

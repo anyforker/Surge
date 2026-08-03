@@ -24,7 +24,7 @@ while IFS=$'\t' read -r entry_target entry_source entry_mode extra; do
 
   if [[ ! "$entry_target" =~ ^config/[a-z0-9]+(-[a-z0-9]+)*\.json$ ]] \
     || [[ "$entry_source" != https://* ]] \
-    || [ "$entry_mode" != "expand-ipv6" ] \
+    || [ "$entry_mode" != "compress-ipv6" ] \
     || [ -n "${extra:-}" ]; then
     printf 'Invalid manifest row at line %d\n' "$line_no" >&2
     exit 1
@@ -72,7 +72,7 @@ if ! curl \
 fi
 
 case "$mode" in
-  expand-ipv6)
+  compress-ipv6)
     node "$normalizer" < "$raw_file" > "$normalized_file"
     ;;
 esac

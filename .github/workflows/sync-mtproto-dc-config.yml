@@ -28,7 +28,7 @@ jobs:
           bash -n scripts/sync-mtproto-dc-config.sh
           node --check scripts/normalize-mtproto-dc-config.js
           test "$(awk -F '\t' 'NF && $1 !~ /^#/ { count++ } END { print count+0 }' scripts/config-sources.tsv)" -eq 1
-          awk -F '\t' 'NF && $1 !~ /^#/ { exit !($1 == "config/mtproto-dc-config.json" && $2 ~ /^https:\/\// && $3 == "expand-ipv6" && NF == 3) }' scripts/config-sources.tsv
+          awk -F '\t' 'NF && $1 !~ /^#/ { exit !($1 == "config/mtproto-dc-config.json" && $2 ~ /^https:\/\// && $3 == "compress-ipv6" && NF == 3) }' scripts/config-sources.tsv
           npm test
           git diff --check
 
