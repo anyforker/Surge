@@ -186,6 +186,7 @@ test("root README routes to each detailed directory guide", () => {
   for (const guide of [
     "module/README.md",
     "rule/README.md",
+    "config/README.md",
     "icons/README.md",
     "scripts/README.md",
   ]) {

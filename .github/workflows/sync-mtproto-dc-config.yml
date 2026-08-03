@@ -1,0 +1,47 @@
+name: Sync MTProto DC config
+
+on:
+  schedule:
+    - cron: "30 18 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-mtproto-dc-config
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Generate normalized MTProto DC config
+        run: bash scripts/sync-mtproto-dc-config.sh
+
+      - name: Validate MTProto DC config
+        run: |
+          bash -n scripts/sync-mtproto-dc-config.sh
+          node --check scripts/normalize-mtproto-dc-config.js
+          test "$(awk -F '\t' 'NF && $1 !~ /^#/ { count++ } END { print count+0 }' scripts/config-sources.tsv)" -eq 1
+          awk -F '\t' 'NF && $1 !~ /^#/ { exit !($1 == "config/mtproto-dc-config.json" && $2 ~ /^https:\/\// && $3 == "expand-ipv6" && NF == 3) }' scripts/config-sources.tsv
+          npm test
+          git diff --check
+
+      - name: Commit and push changes
+        run: |
+          target="$(awk -F '\t' 'NF && $1 !~ /^#/ { print $1 }' scripts/config-sources.tsv)"
+          if [ -z "$(git status --porcelain -- "$target")" ]; then
+            echo "No MTProto DC config changes."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- "$target"
+          git commit -m "Sync MTProto DC config"
+          git push

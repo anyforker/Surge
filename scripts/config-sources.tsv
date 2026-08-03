@@ -1,0 +1,2 @@
+# target	source	mode
+config/mtproto-dc-config.json	https://raw.githubusercontent.com/surge-networks/MTProtoDCConfigGenerator/refs/heads/main/mtproto-dc-config.json	expand-ipv6

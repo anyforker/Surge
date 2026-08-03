@@ -13,6 +13,9 @@
 | [`rule-set-sources.tsv`](rule-set-sources.tsv) | 上游规则来源、目标文件和转换模式 | `rule/upstream/**/*.list` |
 | [`sync-rule-sets.sh`](sync-rule-sets.sh) | 下载、转换并生成规则镜像 | `rule/upstream` |
 | [`build-ai-rule-set.sh`](build-ai-rule-set.sh) | 合并并精确去重 OpenAI、Gemini 与自定义 AI 规则 | `rule/ai.list` |
+| [`config-sources.tsv`](config-sources.tsv) | 第三方配置来源、目标文件和转换模式 | `config/*.json` |
+| [`sync-mtproto-dc-config.sh`](sync-mtproto-dc-config.sh) | 下载并规范化 MTProto 数据中心配置 | `config/mtproto-dc-config.json` |
+| [`normalize-mtproto-dc-config.js`](normalize-mtproto-dc-config.js) | 将 MTProto 配置中的 IPv6 地址展开为完整格式 | 标准输出 |
 
 ## 自动任务
 
@@ -21,6 +24,7 @@
 | 上游规则同步 | 每日 01:00 | [`.github/workflows/sync-upstream-rule-sets.yml`](../.github/workflows/sync-upstream-rule-sets.yml) |
 | 模块脚本同步 | 每日 01:30 | [`.github/workflows/sync-upstream-module-scripts.yml`](../.github/workflows/sync-upstream-module-scripts.yml) |
 | 完整模块同步 | 每日 02:00 | [`.github/workflows/sync-upstream-modules.yml`](../.github/workflows/sync-upstream-modules.yml) |
+| MTProto 配置同步 | 每日 02:30 | [`.github/workflows/sync-mtproto-dc-config.yml`](../.github/workflows/sync-mtproto-dc-config.yml) |
 
 任务支持在 GitHub Actions 中手动触发。同步完成后会先执行格式、路径和测试校验；没有内容变化时不会产生空提交。完整模块下载会自动重试；若上游仍不可用但仓库已有对应模块，则保留现有版本、记录 GitHub Actions 警告并继续同步其余模块。首次新增的模块下载失败时仍会终止任务。
 
@@ -33,6 +37,7 @@ npm run sync:module-scripts
 npm run sync:modules
 bash scripts/sync-rule-sets.sh
 npm run build:ai-rules
+npm run sync:mtproto-config
 npm test
 ```
 
