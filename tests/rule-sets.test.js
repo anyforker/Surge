@@ -16,6 +16,11 @@ const brokerPath = path.join(
   root,
   "rule/upstream/Arthur-vx/Broker/Broker.list"
 );
+const directPath = path.join(root, "rule/direct.list");
+const chinaMaxPath = path.join(
+  root,
+  "rule/upstream/blackmatrix7/ChinaMax/ChinaMax_All.list"
+);
 
 function readRules(filename) {
   return fs
@@ -52,6 +57,22 @@ test("aggregated AI rules retain upstream ASN and Gemini entries", () => {
 
 test("self-maintained Emby rules contain only the configured service domain", () => {
   assert.deepEqual(readRules(embyPath), ["DOMAIN-SUFFIX,uhdnow.com"]);
+});
+
+test("ChinaMax aggregate contains every custom direct rule exactly once", () => {
+  const source = fs.readFileSync(chinaMaxPath, "utf8");
+  const chinaMaxRules = readRules(chinaMaxPath);
+  const directRules = readRules(directPath);
+
+  assert.match(source, /^## Mode: mirror-with-direct$/m);
+  assert.match(source, /^## Supplemental source: rule\/direct\.list$/m);
+  for (const rule of directRules) {
+    assert.equal(
+      chinaMaxRules.filter((candidate) => candidate === rule).length,
+      1,
+      rule
+    );
+  }
 });
 
 test("mirrored Broker rules retain Futu and Longbridge coverage", () => {

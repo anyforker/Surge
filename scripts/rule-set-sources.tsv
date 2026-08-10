@@ -22,6 +22,6 @@ rule/upstream/blackmatrix7/BiliBili/BiliBili.list	https://raw.githubusercontent.
 rule/upstream/blackmatrix7/ChinaMedia/ChinaMedia.list	https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ChinaMedia/ChinaMedia.list	mirror
 rule/upstream/blackmatrix7/GlobalMedia/GlobalMedia_All_No_Resolve.list	https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/GlobalMedia/GlobalMedia_All_No_Resolve.list	mirror
 rule/upstream/blackmatrix7/Proxy/Proxy_All_No_Resolve.list	https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Proxy/Proxy_All_No_Resolve.list	mirror
-rule/upstream/blackmatrix7/ChinaMax/ChinaMax_All.list	https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ChinaMax/ChinaMax_All.list	mirror
+rule/upstream/blackmatrix7/ChinaMax/ChinaMax_All.list	https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ChinaMax/ChinaMax_All.list	mirror-with-direct
 rule/upstream/MetaCubeX/geo/geosite/category-porn.list	https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-porn.list	geosite-domain-suffix
 rule/upstream/Arthur-vx/Broker/Broker.list	https://raw.githubusercontent.com/Arthur-vx/broker-rules/main/rule/Surge/Broker/Broker.list	mirror

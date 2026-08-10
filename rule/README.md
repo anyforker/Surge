@@ -9,7 +9,7 @@
 ```ini
 RULE-SET,https://raw.githubusercontent.com/anyforker/Surge/main/rule/ai.list,AI
 RULE-SET,https://raw.githubusercontent.com/anyforker/Surge/main/rule/emby.list,Emby
-RULE-SET,https://raw.githubusercontent.com/anyforker/Surge/main/rule/direct.list,DIRECT
+RULE-SET,https://raw.githubusercontent.com/anyforker/Surge/main/rule/upstream/blackmatrix7/ChinaMax/ChinaMax_All.list,DIRECT
 ```
 
 规则顺序会影响匹配结果。更具体的规则集应放在通用代理、直连和 `FINAL` 规则之前。
@@ -17,6 +17,8 @@ RULE-SET,https://raw.githubusercontent.com/anyforker/Surge/main/rule/direct.list
 ## 聚合规则
 
 [`ai.list`](ai.list) 由 Blackmatrix7 OpenAI、EAlyce OpenAI、Blackmatrix7 Gemini 和本仓库补充规则精确去重生成。同步上游规则时会自动重新生成，其中的 ASN 和其他上游规则均原样保留。
+
+[`ChinaMax_All.list`](upstream/blackmatrix7/ChinaMax/ChinaMax_All.list) 由 Blackmatrix7 ChinaMax 与本仓库 [`direct.list`](direct.list) 聚合生成。自定义直连规则会精确去重后附加到上游内容中，因此使用聚合文件时不需要再单独引用 `direct.list`。
 
 | 文件 | 用途 | Raw 地址 |
 | --- | --- | --- |
@@ -31,7 +33,7 @@ RULE-SET,https://raw.githubusercontent.com/anyforker/Surge/main/rule/direct.list
 | [`ai-custom.list`](ai-custom.list) | AI 聚合规则的本仓库补充来源 | 不建议单独引用 |
 | [`emby.list`](emby.list) | 自维护 Emby 服务域名 | `https://raw.githubusercontent.com/anyforker/Surge/main/rule/emby.list` |
 | [`corp.list`](corp.list) | 企业及办公网络相关规则 | `https://raw.githubusercontent.com/anyforker/Surge/main/rule/corp.list` |
-| [`direct.list`](direct.list) | 自定义直连规则 | `https://raw.githubusercontent.com/anyforker/Surge/main/rule/direct.list` |
+| [`direct.list`](direct.list) | ChinaMax 聚合规则的本仓库补充来源 | 不建议单独引用 |
 
 ## 上游镜像
 

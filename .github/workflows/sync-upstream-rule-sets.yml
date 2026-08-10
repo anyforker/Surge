@@ -40,6 +40,10 @@ jobs:
             case "$mode" in
               mirror)
                 ;;
+              mirror-with-direct)
+                grep -q '^## Supplemental source: rule/direct.list$' "$target"
+                grep -q '^## Supplemental rules added: ' "$target"
+                ;;
               geosite-domain-suffix)
                 awk 'NF && $0 !~ /^##/ && $0 !~ /^DOMAIN-SUFFIX,[A-Za-z0-9._-]+$/ { print FILENAME ":" NR ":" $0; bad=1 } END { exit bad }' "$target"
                 test -z "$(awk 'NF && $0 !~ /^##/ { print }' "$target" | sort | uniq -d)"

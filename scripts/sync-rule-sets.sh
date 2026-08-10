@@ -37,6 +37,45 @@ sync_mirror() {
   curl -L --fail --silent --show-error --max-time 60 "$source"
 }
 
+sync_mirror_with_direct() {
+  local source="$1"
+  local direct_source="rule/direct.list"
+  local upstream_file="$tmp_dir/china-max.upstream.list"
+  local supplemental_file="$tmp_dir/china-max.supplemental.list"
+  local supplemental_count
+
+  if [ ! -f "$direct_source" ]; then
+    echo "Direct rule source not found: $direct_source" >&2
+    exit 1
+  fi
+
+  sync_mirror "$source" > "$upstream_file"
+  awk '
+    NR == FNR {
+      line = $0
+      sub(/\r$/, "", line)
+      if (line != "" && line !~ /^#/) seen[line] = 1
+      next
+    }
+    {
+      line = $0
+      sub(/\r$/, "", line)
+      if (line != "" && line !~ /^#/ && !seen[line]++) print line
+    }
+  ' "$upstream_file" "$direct_source" > "$supplemental_file"
+
+  supplemental_count="$(wc -l < "$supplemental_file" | tr -d ' ')"
+  printf '## Supplemental source: %s\n' "$direct_source"
+  printf '## Supplemental rules added: %s\n' "$supplemental_count"
+  printf '\n'
+  cat "$upstream_file"
+
+  if [ "$supplemental_count" -gt 0 ]; then
+    printf '\n# Supplemental rules from %s\n' "$direct_source"
+    cat "$supplemental_file"
+  fi
+}
+
 sync_geosite_domain_suffix() {
   local source="$1"
 
@@ -84,6 +123,9 @@ while IFS=$'\t' read -r target source mode extra; do
     case "$mode" in
       mirror)
         sync_mirror "$source"
+        ;;
+      mirror-with-direct)
+        sync_mirror_with_direct "$source"
         ;;
       geosite-domain-suffix)
         printf '## Supplemental entries: adult creator platforms and adult TLDs not present in source\n'
