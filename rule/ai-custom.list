@@ -1,7 +1,9 @@
 # NAME: Custom AI Supplemental
 # AUTHOR: anyforker
 # REPO: https://github.com/anyforker/Surge
+# DOMAIN: 1
 # DOMAIN-SUFFIX: 1
-# TOTAL: 1
+# TOTAL: 2
 
+DOMAIN,oaiproxy.neocoder.cc
 DOMAIN-SUFFIX,ip-api.com

@@ -40,6 +40,7 @@ test("aggregated AI rules retain upstream ASN and Gemini entries", () => {
     "IP-ASN,13335,no-resolve",
     "IP-ASN,20473,no-resolve",
     "IP-ASN,399358,no-resolve",
+    "DOMAIN,oaiproxy.neocoder.cc",
     "DOMAIN,ai.google.dev",
     "DOMAIN-SUFFIX,gemini.google.com",
     "DOMAIN-KEYWORD,generativelanguage",
