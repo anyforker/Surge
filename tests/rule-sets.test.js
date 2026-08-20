@@ -55,8 +55,8 @@ test("aggregated AI rules retain upstream ASN and Gemini entries", () => {
   }
 });
 
-test("self-maintained Emby rules contain only the configured service domain", () => {
-  assert.deepEqual(readRules(embyPath), ["DOMAIN-SUFFIX,uhdnow.com"]);
+test("self-maintained Emby rules contain only the configured service domains", () => {
+  assert.deepEqual(readRules(embyPath), ["DOMAIN-SUFFIX,oceancloud.asia", "DOMAIN-SUFFIX,uhdnow.com"]);
 });
 
 test("ChinaMax aggregate contains every custom direct rule exactly once", () => {
