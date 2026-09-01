@@ -1,9 +1,9 @@
 # NAME: Custom Corporate
 # AUTHOR: anyforker
 # REPO: https://github.com/anyforker/Surge
-# UPDATED: 2026-07-07 13:35:49
-# DOMAIN-SUFFIX: 30
-# TOTAL: 30
+# UPDATED: 2026-09-01
+# DOMAIN-SUFFIX: 34
+# TOTAL: 34
 DOMAIN-SUFFIX,alipay.com
 DOMAIN-SUFFIX,alipay.cn
 DOMAIN-SUFFIX,alipay.net
@@ -34,3 +34,7 @@ DOMAIN-SUFFIX,antfin.net
 DOMAIN-SUFFIX,antfin-inc.com
 DOMAIN-SUFFIX,antfin-inc.cn
 DOMAIN-SUFFIX,antfin-inc.net
+DOMAIN-SUFFIX,antgroup.com
+DOMAIN-SUFFIX,antgroup-inc.com
+DOMAIN-SUFFIX,antgroup-inc.cn
+DOMAIN-SUFFIX,antgroup-inc.net
