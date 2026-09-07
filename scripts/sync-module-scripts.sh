@@ -21,7 +21,36 @@ if [ -n "$duplicate_targets" ]; then
 fi
 
 download() {
-  curl -L --fail --silent --show-error --max-time 120 "$1"
+  curl \
+    -L \
+    --fail \
+    --silent \
+    --show-error \
+    --max-time 120 \
+    --retry 3 \
+    --retry-all-errors \
+    --retry-delay 2 \
+    --user-agent "Mozilla/5.0" \
+    "$1"
+}
+
+normalize_file() {
+  local source_file="$1"
+  local normalized_file="${source_file}.normalized"
+
+  awk '
+    { lines[NR] = $0 }
+    END {
+      last = NR
+      while (last > 0 && lines[last] ~ /^[[:space:]]*$/) {
+        last--
+      }
+      for (i = 1; i <= last; i++) {
+        print lines[i]
+      }
+    }
+  ' "$source_file" > "$normalized_file"
+  mv "$normalized_file" "$source_file"
 }
 
 sync_web_adblock_main() {
@@ -74,6 +103,8 @@ while IFS=$'\t' read -r target source mode extra; do
       exit 1
       ;;
   esac
+
+  normalize_file "$tmp_file"
 
   if [ ! -s "$tmp_file" ]; then
     echo "Downloaded empty script: $target" >&2

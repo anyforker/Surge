@@ -89,13 +89,14 @@ const BODY_INJECTION_BASE = `
 `;
 
 // 正则表达式 (不变)
-const TARGET_SITES_REGEX = /(missav|netflav|hitomi|supjav|njav|javday|91porna|lk1\.supremejav\.com|turbovidhls\.com|trailerhg\.xyz|turbovidhls\.com|turboplayers\.xyz|javggvideo\.xyz|turtleviplay\.xyz|findjav\.com|stbturbo\.xyz|emturbovid\.com)/i;
+const TARGET_SITES_REGEX = /(missav|iyf|netflav|hitomi|supjav|njav|javday|91porna|lk1\.supremejav\.com|turbovidhls\.com|trailerhg\.xyz|turbovidhls\.com|turboplayers\.xyz|javggvideo\.xyz|turtleviplay\.xyz|findjav\.com|stbturbo\.xyz|emturbovid\.com)/i;
 const JAVBUS_REGEX = /(javbus)/i;
 const DMM_REGEX = /dmm\.co/i;
 const MDSP_REGEX = /d1skbu98kuldnf\.cloudfront\.net/i;
 const HUARENLIVE_REGEX = /(huaren|huavod)\.(live|top)\/player\/ec\.php/i;
 
-const TITLE_REGEX = /<head>/i;
+// const TITLE_REGEX = /<head>/i;
+const TITLE_REGEX = /<head\b[^>]*>/i;
 const BODY_REGEX = /<\/body>/i;
 const WINDOW_OPEN_REGEX = /window\.open\s*\(/g;
 

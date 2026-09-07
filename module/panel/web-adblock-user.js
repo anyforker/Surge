@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         Adblock4limbo.[github]
 // @namespace    https://github.com/limbopro/Adblock4limbo/raw/main/Adguard/Adblock4limbo.user.js
-// @version      0.2026.08.21
+// @version      0.2026.09.05
 // @license      CC BY-NC-SA 4.0
-// @description  毒奶去网页广告计划用户脚本 For Quantumult X & Surge & Shadowrocket & Loon & Stash & 油猴 ；1.新增页面右下角导航；2.通过 JavaScript 移除特定网站网页广告 —— 搜索引擎（Bing/Google）广告及内容农场结果清除/低端影视/欧乐影院/iyf爱壹帆/哔滴影视/Pornhub/Javbus/Supjav/Jable(支持抓取M3U8链接)/MissAv/91porn(支持视频下载)/hitomi/紳士漫畫/禁漫天堂/等视频&ACG&小说&漫画网站上的弹窗广告&视频广告&Gif图片广告等，保持网页清爽干净无打扰！ P.S. 欢迎提交issue
+// @description  毒奶去网页广告计划用户脚本 For Quantumult X & Surge & Shadowrocket & Loon & Stash & 油猴 ；1.新增页面右下角导航；2.通过 JavaScript 移除特定网站网页广告 —— 搜索引擎（Bing/Google）广告及内容农场结果清除/低端影视/欧乐影院/iyf爱壹帆/哔滴影视/Pornhub/Javbus/Supjav/Jable(支持抓取M3U8链接)/MissAv/Njav/91porn(支持视频下载)/hitomi/紳士漫畫/禁漫天堂/等视频&ACG&小说&漫画网站上的弹窗广告&视频广告&Gif图片广告等，保持网页清爽干净无打扰！ P.S. 欢迎提交issue
 // @author       limbopro
 
 // @match        https://m.baidu.com/*
@@ -47,6 +47,8 @@
 // @match        https://missav.com/*
 // @match        https://missav.ai/*
 // @match        https://missav.ws/*
+// @match        https://njavtv.com/*
+// @match        https://www.njav.com/*
 // @match        https://javtiful.com/*
 // @match        https://supjav.com/*
 // @match        https://www.javbus.com/*
@@ -58,6 +60,7 @@
 // @match        https://javday.app/*
 // @match        https://www.xvideos.com/*
 // @match        https://4hu.tv/*
+// @match        https://ziziflix.com/*
 // @match        https://www.4hu.tv/*
 // @match        https://netflav.com/*
 // @match        https://t66y.com/*
@@ -249,6 +252,12 @@ function checkDOMLoaded() {
 
 checkDOMLoaded();
 
+
+// 全局设置
+
+// 代理工具识别符
+/*ProxyTools*/
+
 /**
  * 为网页增加导航按钮，将位于页面右下角呈现；
  * 如需取消该按钮，请将如上调用代码注释；
@@ -416,6 +425,7 @@ var adsMax = {
         jkforum: "",
         javland: "img[src*='.gif'], a[href^=\"https://go.rmhfrtnd.com/\"] {display:none !important; pointer-events: none !important;}",  // jav.land
         _4hu: ".couplet-left, body[ontouchstart] > div[id^='content_'][style='display: block;'], div.row.col2 > dl, #btmBox, img[src*=gif],.col5 > dl#randomBox, script[src$=\"/base.js\"] + #couplet, body[ontouchstart] > #topBox,.wrap + #btmBox,.search + #midBox {opacity:0% !important; pointer-events: none !important; height: 0px !important}",
+        ziziflix: ".ad-desktop,.ad-mobile {display:none !important; pointer-events: none !important;}",
         // {opacity:0% !important; pointer-events: none !important; height: 0px !important}
         netflav: "iframe[src*=xlv],.ads_video_overlay_mobile, div.widget-container, a[href*=\"register\"][target=\"_blank\"],div.ads_video_close_button,div.ads_video_overlay_mobile,div.footer_root,div.ads_head_banner_container {display:none !important;}",
         supjav: '.video-wrap > div.right,#pop, .div_pop, #pop.div_pop, .movv-ad, #adsbox, div.right, div.movv-ad.ad_3_3, div.movv-ad.ad_3_2, .movv-ad, .adsbyexoclick, #adsbox, .adsbyexoclick  {display:none !important; pointer-events: none !important;}',
@@ -463,6 +473,7 @@ function values() {
         "xchina.co",
         'dmm.co.jp',
         "missav",
+        "njavtv.com",
         "javtiful",
         "bi-girl",
         "marketcap",
@@ -515,6 +526,7 @@ function values() {
         "av.jkforum.net",
         "jav.land",
         "4hu",
+        "ziziflix",
         "netflav",
         "javplayer",
         "filemoon",
@@ -541,7 +553,7 @@ function values() {
         'douban',
         'twitter',
         'olevod',
-        'njav',
+        'njav.com',
         'ntdm9',
         'play.huaren.live',
         'huaren.live',
@@ -1609,6 +1621,11 @@ function adsDomain_switch(x) { // 匹配参数值 执行相应函数
             css_adsRemove(adsMax.css._4hu);
             hrefAttribute_set();
             break;
+        case "ziziflix":
+            css_adsRemove(adsMax.css.ziziflix);
+            noWindowOpenIf('window.open')
+            noWindowOpenIf('touchend')
+            break;
         case "netflav":
             window_open_defuser(); // 打断 window.open 施法
             css_adsRemove(adsMax.css.netflav, 0, "4hu");
@@ -1684,7 +1701,7 @@ function adsDomain_switch(x) { // 匹配参数值 执行相应函数
             window_open_defuser(); // 打断 window.open 施法
 
             break;
-        case "njav":
+        case "njav.com":
             css_adsRemove(adsMax.css.njav, 0, 'njav');
             js_adsRemove(uBlockOrigin.setconstant);
             js_adsRemove(uBlockOrigin.nowindowopenif);
@@ -2264,6 +2281,7 @@ function adsDomain_switch(x) { // 匹配参数值 执行相应函数
 
             break;
 
+        case 'njavtv.com':
         case 'missav':
 
             window.addEventListener('load', function () {
