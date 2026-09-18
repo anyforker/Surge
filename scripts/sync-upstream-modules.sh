@@ -72,9 +72,9 @@ validate_module() {
       ;;
     biliuniverse-adblock)
       grep -Fqx '#!name=哔哩哔哩广告过滤' "$file"
-      grep -Eqi '^#!homepage[[:space:]]*=[[:space:]]*https://ADBlock\.BiliUniverse\.io$' "$file"
+      grep -Eqi '^#!homepage[[:space:]]*=[[:space:]]*https://(ADBlock\.BiliUniverse\.io|biliverse\.github\.io/guide/ad-block)$' "$file"
       expected_category="AdBlock"
-      required_sections=("URL Rewrite" "Script" "MITM" "Map Local")
+      required_sections=("Script" "MITM" "Map Local")
       ;;
     spotify-enhancement)
       grep -Fqx '#!name=Spotify 功能增强' "$file"

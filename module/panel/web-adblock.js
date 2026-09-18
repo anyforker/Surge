@@ -35,9 +35,9 @@ const privacyGate_style = `
 <head>
 <style id="privacy-gate">
     /* 初始强制黑屏 */
-    html.locked body { 
-        visibility: hidden !important; 
-        background: #000 !important;  
+    html.locked body {
+        visibility: hidden !important;
+        background: #000 !important;
     }
 </style>
 `
@@ -249,7 +249,7 @@ function main() {
 
                 newBody = newBody.replace(TITLE_REGEX, privacyGate_style) // 插入样式
                 newBody = newBody.replace(BODY_REGEX, privacyGate_script) // 插入脚本
-                
+
                 newBody = newBody.replace(TITLE_REGEX, FINAL_TITLE_INJECTION);
                 modified = true;
             }

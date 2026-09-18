@@ -39,7 +39,10 @@ normalize_file() {
   local normalized_file="${source_file}.normalized"
 
   awk '
-    { lines[NR] = $0 }
+    {
+      sub(/[[:space:]]+$/, "")
+      lines[NR] = $0
+    }
     END {
       last = NR
       while (last > 0 && lines[last] ~ /^[[:space:]]*$/) {

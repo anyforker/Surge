@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Adblock4limbo——导航及各类功能函数合集.[github]
 // @namespace    https://limbopro.com/Adguard/Adblock4limbo.function.js
-// @version      0.2026.08.26
+// @version      0.2026.09.15
 // @license      CC BY-NC-SA 4.0
 // @description  实用网站导航 —— 沉浸式翻译纯JS版本；M3U8/MP4资源链接提取；广告元素屏蔽器；费在线影视/前端学习/开发者社区/新闻/建站/下载工具/格式转换工具/电子书/新闻/写作/免费漫画等；
 // @author       limbopro
@@ -757,18 +757,18 @@ function getNavigationHTML() {
       <li class="li_global"><button class="a_global special yellow" id="mtzyczq"  style="border-radius:4px;background:#c53f3f" onclick="mtzyczq()">🎦媒体资源查找器</button></li>
       <li class="li_global"><button class="a_global special yellow" onclick="window.geminiElementBlockerOpenPanel()" id="gemini-element-blocker"  style="border-radius:4px;background:#c53f3f">🔍 元素屏蔽/追踪器</button></li>
       <li class="li_global">
-    <button 
-        class="a_global special yellow" 
-        id="carolPanel"  
+    <button
+        class="a_global special yellow"
+        id="carolPanel"
         style="border-radius:4px;background:#c53f3f"
         onclick="window.initWebDebugger()"> ⚙️ Web 存储调试器
     </button>
 </li>
 
 <li class="li_global">
-    <button 
-        class="a_global special yellow" 
-        id="jscodeView"  
+    <button
+        class="a_global special yellow"
+        id="jscodeView"
         style="border-radius:4px;background:#c53f3f"
         onclick="window.showPageScriptsFloatWindow()"> 📟 页面脚本查看器
     </button>
@@ -790,9 +790,9 @@ function getNavigationHTML() {
 
 
 <li class="li_global">
-<button id="loadCSS" 
-    class="a_global special" 
-    title="🌈 加载 AdGuard 过滤器(CSS)" 
+<button id="loadCSS"
+    class="a_global special"
+    title="🌈 加载 AdGuard 过滤器(CSS)"
     onclick="toggleAdGuardFilter()"
     style="
         width: 106px !important;
@@ -818,7 +818,7 @@ function getNavigationHTML() {
     </ul>
   </div>
 
-  
+
 
   <!-- Footer -->
   <div class="_footer" style="color:black!important">
@@ -1359,7 +1359,7 @@ window.parentElement_add = function parentElement_add() {
         });
 
         // 定义一个数组来存储各个链接列表的配置信息
-        const linkConfigs = [ // 2333 
+        const linkConfigs = [ // 2333
             //{ category: 'front-end', selector: '.div_global.front > ul', comment: '前端入门' }, // 注意属性名包含连字符
             // { category: 'knowledge', selector: '.div_global.boysshouldread > ul', comment: '男孩子读物' },
             //{ category: 'ipcheck', selector: '.div_global.ipcheck > ul', comment: '网络连通及被墙检测' },
@@ -2001,7 +2001,7 @@ function injectFloatingWindowStyles() {
                     justify-content: space-between;
                     align-items: center;
                 }
-                
+
                 #floating-output-content {
                     padding: 15px;
                     overflow-y: auto;
@@ -2023,7 +2023,7 @@ function injectFloatingWindowStyles() {
                 .success { color: green; font-weight: bold; }
                 .error { color: red; font-weight: bold; }
                 .result-item { margin-bottom: 10px; padding-bottom: 5px; border-bottom: 1px dotted #ccc; }
-                
+
                 /* --- 代码输入模态框 (Input Prompt Window) 样式 --- */
                 #input-prompt-container {
                     position: fixed;
@@ -2082,11 +2082,11 @@ function injectFloatingWindowStyles() {
                     font-weight: bold;
                 }
                 #execute-code-btn {
-                    background-color: #28a745; 
+                    background-color: #28a745;
                     color: white;
                 }
                 #cancel-code-btn {
-                    background-color: #dc3545; 
+                    background-color: #dc3545;
                     color: white;
                 }
             `;
@@ -2227,7 +2227,7 @@ function createInputPrompt() {
         container.className = 'notranslate'
         container.innerHTML = `
                 <h3 style="margin-top: 0; color: #0056b3;">请输入要执行的 JavaScript 代码</h3>
-                
+
                 <div id="input-controls">
                     <button id="${pasteBtnId}" class="tool-btn" style="
         color: white;
@@ -2238,9 +2238,9 @@ function createInputPrompt() {
     background: red;
 ">清空</button>
                 </div>
-                
+
                 <textarea id="${textareaId}" placeholder="例如: document.title = 'Executed!'" value="console.log('Hello'); return 1 + 1;"></textarea>
-                
+
                 <div id="input-prompt-buttons">
                     <button id="${cancelBtnId}" class="input-prompt-btn">取消</button>
                     <button id="${executeBtnId}" class="input-prompt-btn">执行</button>
@@ -2595,7 +2595,7 @@ loadExternalResourceFireAndForget('script', 'https://limbopro.com/Adguard/little
  * * 独立函数：Web 存储调试器 (Cookies/Local/Session/Config)
  * * 描述: 创建一个悬浮可拖拽的面板，用于实时查看和编辑 Cookie, LocalStorage, SessionStorage，
  * 并提取内嵌的 JSON 配置数据。
- * * 调用方法: 
+ * * 调用方法:
  * 1. 引入文件: <script src="path/to/WebDebugger.js"></script>
  * 2. 执行: window.initWebDebugger();
  */

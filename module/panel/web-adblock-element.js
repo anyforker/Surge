@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         元素屏蔽/追踪器 (V26.39.10 - 拦截程序化点击和 PostMessage)
+// @name         元素屏蔽/追踪器 (V26.40 - 拦截程序化点击和 PostMessage)
 // @namespace    http://tampermonkey.net/
-// @version      26.39.12
+// @version      26.40
 // @description  V26.39.11：在 V26.39.9 同步中断的基础上，新增拦截 Element.prototype.click（用于程序化重定向）和 window.postMessage（用于跨框架侧信道重定向）。这是对高级绕过机制的最后防线。
 // @author       Gemini
 // @match        *://*/*
@@ -28,7 +28,7 @@
     //permanentClearOnce()
 
     // =================================================================
-    // ⚠️ 全局常量与状态 
+    // ⚠️ 全局常量与状态
     // =================================================================
     // 元素永久移除记录（透明元素、选择模式屏蔽的普通元素）
     const ELEMENT_REMOVAL_KEY = 'gemini_zero_opacity_removals';
@@ -512,7 +512,7 @@
                 '.echo', // 导航详情页
                 '#storage-control-panel',
                 '#script-viewer-float-window-Gemini',
-                "[id*='Genimi']", // 
+                "[id*='Genimi']", //
                 "[class*='confirm']", // 确认框
                 '.skiptranslate' // 谷歌翻译
             ].join(',');
@@ -683,7 +683,7 @@
                 <span id="close-style-ui" style="cursor:pointer;font-size:24px;line-height:1;color:#999;">&times;</span>
             </div>
             <div style="padding:16px;max-height:80vh;overflow-y:auto;">
-                
+
                 <div style="font-size:11px;font-weight:bold;color:#888;margin-bottom:4px;">HISTORY RECORDS (编辑历史):</div>
                 <select id="mgr-history-select" style="width:100%;margin-bottom:12px;padding:4px;font-size:11px;border:1px solid #d9d9d9;border-radius:4px;background:#f5f5f5;color:#666;">
                     <option value="">快速切换已编辑的记录 (${allSavedSelectors.length}) ...</option>
@@ -695,14 +695,14 @@
 
                 <div style="font-size:11px;font-weight:bold;color:#888;margin-bottom:4px;">STRUCTURE & ID/CLASS (结构与身份):</div>
                 <pre id="mgr-struct-display" style="background:#f8f9fa;padding:8px;font-size:11px;border-radius:4px;margin-bottom:12px;border:1px solid #eee;color:#333;">${info.header}</pre>
-                
+
                 <div style="font-size:11px;font-weight:bold;color:#888;margin-bottom:4px;">REAL-TIME COMPUTED (实时计算样式):</div>
                 <pre id="mgr-computed-display" style="background:#282c34;padding:10px;font-size:11px;max-height:80px;overflow-y:auto;border-radius:6px;margin-bottom:12px;color:#abb2bf;border:1px solid #181a1f;">${info.computed}</pre>
-                
+
                 <div style="font-size:11px;font-weight:bold;color:#1d39c4;margin-bottom:4px;">EDIT INLINE STYLE (编辑内联样式):</div>
-                <textarea id="inline-css-input" placeholder="${placeholderText}" 
+                <textarea id="inline-css-input" placeholder="${placeholderText}"
                     style="width:100% !important;height:100px !important;border:1px solid #2f54eb !important;border-radius:6px !important;padding:10px !important;font-size:13px !important;box-sizing:border-box !important;">${info.saved}</textarea>
-                
+
                 <div style="display:flex;gap:10px;margin-top:15px;">
                      <button id="clear-style-ui" style="flex:1;padding:10px;background:#fff;border:1px solid #ff4d4f;color:#ff4d4f;border-radius:6px;font-size:12px;cursor:pointer;">清空记录</button>
                      <button id="save-style-ui" style="flex:2;padding:10px;background:#2f54eb;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:bold;cursor:pointer;">应用并保存</button>
@@ -816,24 +816,40 @@
     function injectStyles(containerId, windowId) { // 真正注入样式CSS
         const style = document.createElement('style');
         style.textContent = `
-       
+
+       #gemini-main-container,
+#gemini-float-window {
+    /* 1. 禁用任何 CSS 过渡动画，防止拖拽坐标延迟 */
+    transition: none !important;
+    -webkit-transition: none !important;
+
+    /* 2. 隔离移动端手势与文本选中 */
+    touch-action: none !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+
+    /* 3. 关闭移动端极其耗费 GPU 性能的滤镜，消除拖拽残影 */
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
 
         .gemini-debug-exit {
-        position: absolute !important; 
-        top: -10px !important; 
-        right: -10px !important; 
-        width: 28px !important; 
-        height: 28px !important; 
-        background-color: #dc3545 !important; 
-        color: white !important; 
-        border: 2px solid white !important; 
-        border-radius: 50% !important; 
-        cursor: pointer !important; 
-        font-size: 18px !important; 
+        position: absolute !important;
+        top: -10px !important;
+        right: -10px !important;
+        width: 28px !important;
+        height: 28px !important;
+        background-color: #dc3545 !important;
+        color: white !important;
+        border: 2px solid white !important;
+        border-radius: 50% !important;
+        cursor: pointer !important;
+        font-size: 18px !important;
         font-weight: bold !important;
-        display: flex !important; 
-        align-items: center !important; 
-        justify-content: center !important; 
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
         z-index: 10001 !important;
         box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
         padding: 0 !important;
@@ -851,7 +867,7 @@
         transform: scale(0.9) !important;
     }
 
-        
+
 
     /*xx-small*/
 
@@ -862,7 +878,7 @@
     flex: 1;
     width: 100%;
     padding: 8px 5px;
-    
+
     /* 视觉属性 */
     /*background: #151a15;*/
     background:#000000d6;
@@ -870,7 +886,7 @@
     border-radius: 4px;
     box-shadow: inset 42px 14px 27px 2px rgba(0, 0, 0, 0.2);
     cursor: pointer;
-    
+
     /* 文字属性 */
     color: #8e8f8e;
     font-size: xx-small;
@@ -948,41 +964,41 @@ border: white !important;
 
             /* 1. 最外层容器：z-index 提高确保覆盖 Iframe */
             #${containerId} {
-                position: fixed; 
-                top: 20px; 
-                right: 20px; 
-                z-index: 114115; 
-                transition: transform 0.2s ease-out; 
-                border-radius: 5px; 
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 114115;
+                transition: transform 0.2s ease-out;
+                border-radius: 5px;
                /* box-shadow: 0 10px 30px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05); */
                 box-shadow: 0 0 3px 3px rgba(0,0,0,0.2), 0 0 6px 6px rgba(0,0,0,0.05);
-                width: 400px; 
-                background: #f7f7f7; 
-                
+                width: 400px;
+                background: #f7f7f7;
+
                /* padding: 20px 23px 23px 20px;*/
                 padding: 0px 20px 0px 20px;
-                cursor: default; 
+                cursor: default;
                 user-select: none;
                 font-family: 'Helvetica Neue', Arial, sans-serif;
             }
-            
+
             /* 2. 内部浮窗：内容容器 */
             #${windowId} {
-                background: #fff; 
+                background: #fff;
                 /* border: 1px solid #e0e0e0; */
-                border-radius: 8px; 
-                font-size: 13px; 
-                max-height: 100vh; 
-                overflow: hidden; 
+                border-radius: 8px;
+                font-size: 13px;
+                max-height: 100vh;
+                overflow: hidden;
             }
 
             /* 3. 内部拖拽区域和光标设置 */
             #${windowId} #gemini-header,
             #${windowId} #gemini-status-bar,
             #${windowId} .gemini-tip-text,
-            #${containerId} { 
-                cursor: move; 
-                touch-action: none; 
+            #${containerId} {
+                cursor: move;
+                touch-action: none;
             }
 
             #${containerId}  button {
@@ -990,12 +1006,12 @@ border: white !important;
             }
 
 
-            
+
             /* 阻止内部可点击元素继承 move 光标 */
             #${windowId} * {
                 cursor: default;
             }
-            #${windowId} button, #${windowId} span[id$="close-btn"], #${windowId} .element-info, #${windowId} .iframe-info, #${windowId} .tab-btn, 
+            #${windowId} button, #${windowId} span[id$="close-btn"], #${windowId} .element-info, #${windowId} .iframe-info, #${windowId} .tab-btn,
             #gemini-custom-modal-overlay button {
                  cursor: pointer !important;
             }
@@ -1005,7 +1021,7 @@ border: white !important;
             color:black;
                 /*padding: 10px 15px;*/
                 padding: 10px 0px 0px 0px;
-                background: #f8f8f8; 
+                background: #f8f8f8;
                 border-bottom: 1px solid #ececec;
                 /*display: flex;*/
                 display:grid;
@@ -1013,12 +1029,12 @@ border: white !important;
                 justify-content: space-between;
                 align-items: center;
             }
-            
+
             /* 增大关闭按钮点击区域 */
             #${windowId} #gemini-pin-btn,
             #${windowId} #gemini-close-btn {
-                font-size: 24px; 
-                padding: 5px 0px; 
+                font-size: 24px;
+                padding: 5px 0px;
                 margin-left: 10px;
                 color: #555;
                 background: none;
@@ -1028,26 +1044,26 @@ border: white !important;
                 line-height: 1;
             }
             #${windowId} #gemini-close-btn:hover {
-                background: #ffe6e6; 
-                color: #dc3545; 
+                background: #ffe6e6;
+                color: #dc3545;
             }
 
             /* 状态栏样式 (美化) */
             #${windowId} #gemini-status-bar {
                 padding: 8px 15px;
-                background: #e6f7ff; 
-                color: #0050b3; 
+                background: #e6f7ff;
+                color: #0050b3;
                 border-top: 1px solid #cceeff;
                 font-weight: 500;
                 text-align: left;
-                border-radius: 0 0 8px 8px; 
+                border-radius: 0 0 8px 8px;
             }
 
             /* 提示信息样式 (美化) */
             #${windowId} .gemini-tip-text {
                 padding: 15px 15px;
                 line-height: 1.25;
-                background: #fafafa; 
+                background: #fafafa;
                  /*
             max-height:50px;
             overflow:auto;
@@ -1057,7 +1073,7 @@ border: white !important;
                 border-top: 1px dashed #eee;
                 text-align: center;
             }
-            
+
             /* Tab 按钮样式 */
             #${windowId} .tab-btn {
                 padding: 10px 8px;
@@ -1076,32 +1092,32 @@ border: white !important;
             #${windowId} .gemini-list-scroll-area {
                /* max-height: 130px; */
                 max-height: 20vh;
-                overflow-y: auto; 
+                overflow-y: auto;
                 padding: 0;
                 margin: 0;
-                border-top: 1px solid #eee; 
+                border-top: 1px solid #eee;
             }
-            
+
             /* 列表项美化 */
             #${windowId} ul li {
                 font-size: 12px;
                 padding: 8px 15px;
-                
+
             }
 
             /* 模态框样式 */
             #gemini-custom-modal-overlay {
                 overflow:auto;
-                position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
                 /*background: rgba(0, 0, 0, 0.7); */
                 background:rgb(0 0 0 / 45%);
-                z-index: 114120; 
+                z-index: 114120;
                 display: flex; justify-content: center; align-items: center;
                 /*backdrop-filter: blur(2px);*/
                 font-family: 'Helvetica Neue', Arial, sans-serif;
             }
             #gemini-custom-modal-overlay > div {
-                background: white; border-radius: 10px; padding: 20px; 
+                background: white; border-radius: 10px; padding: 20px;
                 box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3); max-width: 450px;
                 width: 90%; /* 增加宽度适应性 */
                 font-size: 14px;
@@ -1112,18 +1128,18 @@ border: white !important;
             #gemini-custom-modal-overlay button {
 
             /*
-                padding: 10px 15px; 
-                border-radius: 6px; 
-                cursor: pointer !important; 
-                font-weight: bold; 
+                padding: 10px 15px;
+                border-radius: 6px;
+                cursor: pointer !important;
+                font-weight: bold;
                 margin: 5px;
                 transition: background 0.2s, box-shadow 0.2s;
             */
 
-                padding: 8px 0px; 
-                border-radius: 6px; 
-                cursor: pointer !important; 
-                font-weight: bold; 
+                padding: 8px 0px;
+                border-radius: 6px;
+                cursor: pointer !important;
+                font-weight: bold;
                 margin: 1px;
                 font-size:xx-small;
                 transition: background 0.2s, box-shadow 0.2s;
@@ -1131,7 +1147,7 @@ border: white !important;
             }
 
 
-            
+
             /* V26.20 新增：操作提示文本容器样式 */
             #gemini-custom-modal-overlay .operation-notes p {
                 margin: 1px 0; /* 减少段落间的默认间距 */
@@ -1146,11 +1162,11 @@ border: white !important;
             /* 移动端媒体查询 */
             @media (max-width: 768px) {
                 #${containerId} {
-                    width: 90vw; 
-                    right: 5vw; 
-                    left: 5vw; 
+                    width: 90vw;
+                    right: 5vw;
+                    left: 5vw;
                     top: 5px;
-                    /* padding: 10px;*/ 
+                    /* padding: 10px;*/
                     /* padding: 15px;*/
                 }
             }
@@ -1197,7 +1213,7 @@ border: white !important;
 
 
 
-    /* 注入CSS */ 
+    /* 注入CSS */
 }
         `;
         document.head.appendChild(style);
@@ -1223,9 +1239,9 @@ border: white !important;
             modalBox.className = 'notranslate targetInform'
             modalBox.style.cssText = `
                 cursor:move; position:fixed;
-                background: white; border-radius: 6px; padding: 20px; 
+                background: white; border-radius: 6px; padding: 20px;
                 box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3); max-width: 380px;
-                width: 90%; 
+                width: 90%;
                 font-family: 'Helvetica Neue', Arial, sans-serif;
             `;
 
@@ -1262,7 +1278,7 @@ border: white !important;
     🎯 元素点击调试（已捕获）
 </h3>
 
-<div style="font-size: 12px; color: #333; padding: 10px; background: #fff3cd; border: 1px solid #ffeeba; border-radius: 6px; 
+<div style="font-size: 12px; color: #333; padding: 10px; background: #fff3cd; border: 1px solid #ffeeba; border-radius: 6px;
                     margin-bottom: 3px;
                 ">
     ${headerMessage.replace(/\n\n/g, '<br><br>')}
@@ -1270,13 +1286,13 @@ border: white !important;
 
 <div class="operation-notes" style="margin-bottom: 10px;">
     <p style="
-                        font-size: 12px; padding: 5px 10px; 
+                        font-size: 12px; padding: 5px 10px;
                         background: #f1f8ff; border-left: 3px solid #1976D2;
                     ">
         <strong>🛡️ [立即屏蔽]</strong> 将此元素永久添加到屏蔽列表并移除（见记录管理）。
     </p>
     <p style="
-                        font-size: 12px; padding: 5px 10px; 
+                        font-size: 12px; padding: 5px 10px;
                         background: #fffbe6; border-left: 3px solid #FFB300;
                     ">
         <strong>➡️ [放行返回]</strong> 临时放行此元素，但您需要**再次点击**此按钮来触发原始跳转行为。
@@ -1346,8 +1362,8 @@ border: white !important;
 
 
 <div style="display: flex; justify-content: space-around; flex-direction:column ;margin-top: 10px; margin-bottom: 0px; gap: 0px;">
-    
-    
+
+
 
     <button onclick='window.blockImmediatelyBySelector()' id="gemini-modal-confirm-css"
         style="background: #b62b38; color: white; border: none; flex: 1;" class="skiptranslate is-processing">
@@ -1369,7 +1385,7 @@ border: white !important;
     <button id="gemini-modal-cancel" style="background: green; color:white; border: none; flex: 1;">
         ➡️ 放行返回
     </button>
-   
+
     </div>
 `;
 
@@ -1404,7 +1420,7 @@ border: white !important;
                     clickedElement.textContent = '🔰 返回'
 
                     if (localStorage.getItem('gemini_debug_preciseSelector_click_mode') == 'true') {
-                        stopSelectorTool(); // 关闭 ⚓ 元素CSS选择器获取 
+                        stopSelectorTool(); // 关闭 ⚓ 元素CSS选择器获取
                     }
 
                 } else {
@@ -1470,103 +1486,74 @@ border: white !important;
 * @param {string} selectorOrId - 遮罩层的 ID
 */
 
-
     window.makeModalDraggable = function makeModalDraggable(elementId) {
         const el = document.getElementById(elementId);
         if (!el || el.dataset.dragInitialized) return;
 
-        // 核心修正：如果元素本身就是窗口，则直接使用 el；否则才去找子元素
-        const target = el.classList.contains('sel-result-window') ? el : el.firstElementChild;
+        // 确定拖拽主体（优先寻找实际的框体元素）
+        const target = el.classList.contains('sel-result-window') ? el : (el.firstElementChild || el);
         if (!target) return;
 
         let isDragging = false;
-        let startX, startY, initialLeft, initialTop;
+        let startX = 0, startY = 0;
+        let currentX = 0, currentY = 0;
+        let rafId = null;
 
         const startAction = (e) => {
-
-            // 增加排除判断：如果点的是 tips 区域内的按钮或文本，允许拖拽（但按钮本身除外）
-            if (e.target.closest('button, code, #sel-output')) return;
-
-
-            // 2. 【关键修正】排除 #targetInform 区域：
-            // 如果点击的是 #targetInform 或其子元素，我们不触发拖拽逻辑
-            // 这样它原有的 overflow: auto 滚动功能就能正常工作
-            if (e.target.closest('#targetInform')) {
-                return;
-            }
+            // 过滤按钮、输入框、代码块等区域，避免破坏点击事件
+            if (e.target.closest('button, input, textarea, code, #sel-output, #targetInform')) return;
 
             const touch = e.touches ? e.touches[0] : e;
             isDragging = true;
 
-            const rect = target.getBoundingClientRect();
-            startX = touch.clientX;
-            startY = touch.clientY;
-            initialLeft = rect.left;
-            initialTop = rect.top;
+            // 记录起点（减去已经移动过的距离，防止跳变）
+            startX = touch.clientX - currentX;
+            startY = touch.clientY - currentY;
 
-            // --- 关键修正：彻底击穿内联 inset ---
-            target.style.setProperty('position', 'fixed', 'important');
-            target.style.setProperty('inset', 'auto', 'important'); // 清除整体
-            target.style.setProperty('bottom', 'auto', 'important'); // 显式清除
-            target.style.setProperty('right', 'auto', 'important');  // 显式清除
-            target.style.setProperty('margin', '0', 'important');
-            target.style.setProperty('transform', 'none', 'important');
-
-            target.style.setProperty('left', initialLeft + 'px', 'important');
-            target.style.setProperty('top', initialTop + 'px', 'important');
-
+            // 拖拽开始时才拦截默认行为
             if (e.cancelable) e.preventDefault();
         };
-
-        /*
-        const startAction = (e) => {
-            // 排除掉代码块和按钮，防止无法点击/复制代码
-            if (e.target.closest('button, code, #sel-output')) return;
-
-            const touch = e.touches ? e.touches[0] : e;
-            isDragging = true;
-
-            const rect = target.getBoundingClientRect();
-            startX = touch.clientX;
-            startY = touch.clientY;
-            initialLeft = rect.left;
-            initialTop = rect.top;
-
-            // 核心修正：移除 CSS 中可能存在的居中偏移和内联 inset 干扰
-            target.style.setProperty('margin', '0', 'important');
-            target.style.setProperty('transform', 'none', 'important');
-            target.style.setProperty('position', 'fixed', 'important'); // 确保在 body 下自由浮动
-            target.style.setProperty('inset', 'auto', 'important'); // 清除原本 style 中的 inset 限制
-
-            target.style.setProperty('left', initialLeft + 'px', 'important');
-            target.style.setProperty('top', initialTop + 'px', 'important');
-
-            if (e.cancelable) e.preventDefault();
-        };
-        */
 
         const moveAction = (e) => {
             if (!isDragging) return;
+            // 拖拽中必须阻止默认的页面滚动
             if (e.cancelable) e.preventDefault();
+
             const touch = e.touches ? e.touches[0] : e;
-            target.style.setProperty('left', (initialLeft + (touch.clientX - startX)) + 'px', 'important');
-            target.style.setProperty('top', (initialTop + (touch.clientY - startY)) + 'px', 'important');
+            currentX = touch.clientX - startX;
+            currentY = touch.clientY - startY;
+
+            // 帧率节流，确保不卡顿
+            if (rafId) cancelAnimationFrame(rafId);
+            rafId = requestAnimationFrame(() => {
+                if (!isDragging) return;
+                // 直接赋值 translate2d，不再依赖 CSS 变量，确保 100% 生效
+                target.style.setProperty('transform', `translate(${currentX}px, ${currentY}px)`, 'important');
+            });
         };
 
-        const endAction = () => { isDragging = false; };
+        const endAction = () => {
+            isDragging = false;
+            if (rafId) {
+                cancelAnimationFrame(rafId);
+                rafId = null;
+            }
+        };
 
-        // 绑定事件（兼容移动端）
+        // 绑定触摸事件（确保作用域只在拖拽区域）
         target.style.setProperty('touch-action', 'none', 'important');
-        target.addEventListener('mousedown', startAction);
         target.addEventListener('touchstart', startAction, { passive: false });
-        document.addEventListener('mousemove', moveAction, { passive: false });
-        document.addEventListener('touchmove', moveAction, { passive: false });
+        target.addEventListener('touchmove', moveAction, { passive: false });
+        target.addEventListener('touchend', endAction);
+        target.addEventListener('touchcancel', endAction);
+
+        // 兼容桌面端鼠标事件
+        target.addEventListener('mousedown', startAction);
+        document.addEventListener('mousemove', moveAction);
         document.addEventListener('mouseup', endAction);
-        document.addEventListener('touchend', endAction);
 
         el.dataset.dragInitialized = "true";
     };
-
 
 
 
@@ -1582,10 +1569,10 @@ border: white !important;
                 <span title="${selector}" style="flex-grow: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: #9c27b0; font-weight: bold;">
                     🎨 ${safeTruncate(selector, 50)}
                 </span>
-                <button class="edit-css-btn" style="background: #2196F3; color: white; border: none; padding: 2px 6px; cursor: pointer; border-radius: 3px; font-size: 11px;" 
+                <button class="edit-css-btn" style="background: #2196F3; color: white; border: none; padding: 2px 6px; cursor: pointer; border-radius: 3px; font-size: 11px;"
                         data-selector="${selector}">修改</button>
                 <button class="undo-css-btn" style="
-                    background: #ff9800; color: white; border: none; padding: 2px 6px; 
+                    background: #ff9800; color: white; border: none; padding: 2px 6px;
                     margin-left: 10px; cursor: pointer; border-radius: 3px; font-size: 11px;
                 " data-selector="${selector}">取消移除</button>
             </li>
@@ -1965,13 +1952,13 @@ border: white !important;
         const style = document.createElement('style');
         style.id = 'selector-tool-style-final';
         style.innerHTML = `
-        .sel-overlay { 
-            position: fixed; z-index: 2147483645; pointer-events: none; 
-            background: rgba(52, 152, 219, 0.2) !important; 
-            border: 2px dashed #3498db !important; transition: all 0.05s; display: none; 
+        .sel-overlay {
+            position: fixed; z-index: 2147483645; pointer-events: none;
+            background: rgba(52, 152, 219, 0.2) !important;
+            border: 2px dashed #3498db !important; transition: all 0.05s; display: none;
         }
 
-   
+
 /* 基础按钮样式 */
 .sel-btn-base {
     font-weight: bolder !important;
@@ -2021,37 +2008,37 @@ border: white !important;
 }
 
 
-        .sel-result-window { 
-            
+        .sel-result-window {
+
             * 强制重置面板自身的 outline，防止它自己也被高亮 */
             outline: none !important;
 
-            position: fixed; top: 20%; left: 50%; transform: translateX(-50%); 
+            position: fixed; top: 20%; left: 50%; transform: translateX(-50%);
             z-index: 2147483631; width: 90%; max-width: 450px; height:auto !important;
             background: #ffffff !important; border-radius: 6px !important;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4) !important; font-family: sans-serif !important; 
-            padding: 16px !important; border: 1px solid #ddd !important; display: none;
-            box-sizing: border-box !important; touch-action: none !important; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4) !important; font-family: sans-serif !important;
+            padding: 20px !important; border: 1px solid #ddd !important; display: none;
+            box-sizing: border-box !important; touch-action: none !important;
             user-select: none !important; -webkit-user-select: none !important;
         }
-        .sel-title { 
-            font-size: 14px !important; font-weight: bold !important; color: #333 !important; 
-            margin-bottom: 12px !important; display: block !important; 
-            cursor: move !important; padding: 10px 0 !important; border-bottom: 1px solid #eee !important;
+        .sel-title {
+            font-size: 14px !important; font-weight: bold !important; color: #333 !important;
+            margin-bottom: 12px !important; display: block !important;
+            padding: 10px 0 !important; border-bottom: 1px solid #eee !important;
         }
-        .sel-code { 
+        .sel-code {
             line-height: 1.25;
-            background: #f8f9fa !important; color: #d63384 !important; padding: 12px !important; 
-            border-radius: 6px !important; font-family: monospace !important; word-break: break-all !important; 
-            font-size: 13px !important; border: 1px solid #ccc !important; max-height: 150px !important; 
+            background: #f8f9fa !important; color: #d63384 !important; padding: 12px !important;
+            border-radius: 6px !important; font-family: monospace !important; word-break: break-all !important;
+            font-size: 13px !important; border: 1px solid #ccc !important; max-height: 150px !important;
             overflow-y: auto !important; display: block !important; white-space: pre-wrap !important;
             user-select: text !important; -webkit-user-select: text !important;
         }
         .sel-actions { margin-top: 10px !important; display: flex !important; flex-wrap: wrap !important; gap: 8px !important; }
-        .sel-btn { 
+        .sel-btn {
         box-shadow:inset 15px 19px 14px 0px rgb(31 10 10 / 36%), 0px 1px 1px 0px rgba(255, 255, 255, 2.05);
             flex: 1; min-width: 60px; min-height: 40px;
-            padding: 5px !important; border: none !important; border-radius: 8px !important; 
+            padding: 5px !important; border: none !important; border-radius: 8px !important;
             cursor: pointer !important; font-weight: bold !important; font-size: 12px !important;
         }
         .sel-copy-btn { background: #3498db !important; color: #fff !important; }
@@ -2076,19 +2063,9 @@ border: white !important;
         // --- 1. UI 渲染 ---
         resultWin.innerHTML = `
 
-        <!--div id="sel-close-main" style="
-        position: absolute;
-        top: 8px;
-        right: 12px;
-        cursor: pointer;
-        font-size: 20px;
-        color: #999;
-        font-weight: bold;
-        line-height: 1;
-        z-index: 10;
-    " onmouseover="this.style.color='#ff4d4f'" onmouseout="this.style.color='#999'">&times;</div--!>
 
-    <span class="sel-title">元素CSS选择器获取与调试 (测试中...)</span>
+
+   <div id='nodrag' style=" display: none; "> <span class="sel-title">元素CSS选择器获取与调试 (测试中...)</span></div>
   <div class="warm-tips" style="box-shadow: inset 1px 1px 4px 4px rgba(0, 0, 0, 0.2);background: #f0f5ff !important;border: 1px solid #adc6ff;padding: 10px 12px;border-radius: 4px;margin: 5px 0 10px 0;font-size: 11px;color: #1d39c4;line-height: 1.6;">
     • <b>逐级泛化：</b>点击 <button class="t-sel-hint-box" style="font-weight:bolder; cursor:pointer; border:1px solid #85a5ff; border-radius:2px; background:#fff; padding:0 4px; font-size:10px; color: #1d39c4; vertical-align: middle;">逐级泛化</button> 移除末尾属性/索引限制，扩展匹配范围。<br>
     • <b>逐级精简：</b>点击 <button id="t-sel-simplify-box" style="font-weight:bolder; cursor:pointer; border:1px solid #85a5ff; border-radius:2px; background:#fff; padding:0 4px; font-size:10px; color: #1d39c4; vertical-align: middle;">逐级精简</button> 智能剔除冗余父级与索引，仅保留唯一性核心路径。<br>
@@ -2106,7 +2083,7 @@ border: white !important;
 <button id="sel-simplify-box" class="sel-btn-base sel-simplify-box"> 逐级精简 </button>
 <button id="sel-restore-box" class="sel-btn-base sel-restore-box"> 撤销操作↩️ </button>
    </div>
-   
+
 
     <div class="sel-actions">
         <button class="sel-btn sel-copy-btn" id="sel-copy">复制</button>
@@ -2114,11 +2091,11 @@ border: white !important;
         <button class="sel-btn sel-inspect-btn" id="sel-inspect-btn" style="min-width: 65px; color:black; background:#f2f2f2;">定位</button>
         <button class="sel-btn sel-block-btn" id="sel-block">屏蔽</button>
 
-        
+
 <button class="sel-btn sel-reset-btn" id="sel-reset">返回</button>
 
 <!--button class="sel-btn sel-exit-btn" id="sel-exit">退出</button--!>
-        
+
     </div>
 
 
@@ -2602,11 +2579,11 @@ border: white !important;
             }
         };
 
-/*
-resultWin.querySelector('sel-close-main').onclick = resetMode;
-*/
+        /*
+        resultWin.querySelector('sel-close-main').onclick = resetMode;
+        */
 
-resultWin.querySelector('#sel-reset').onclick = resetMode;
+        resultWin.querySelector('#sel-reset').onclick = resetMode;
         //resultWin.querySelector('#sel-exit')?.onclick = destroyTool;
         document.addEventListener('mousemove', onMove, true);
         document.addEventListener('click', onClick, true);
@@ -3230,7 +3207,7 @@ resultWin.querySelector('#sel-reset').onclick = resetMode;
 
     // 示例用法（假设你已经找到了目标元素）：
     /*
-    const lowOpacityElement = document.getElementById('my-transparent-div'); 
+    const lowOpacityElement = document.getElementById('my-transparent-div');
     if (lowOpacityElement) {
         removeListenersAndElement(lowOpacityElement);
     }
@@ -3283,7 +3260,7 @@ resultWin.querySelector('#sel-reset').onclick = resetMode;
             const status = item.isCrossDomain ? '跨域' : '同源';
             const color = item.isCrossDomain ? '#dc3545' : '#17a2b8'; // Red for cross, blue for same
             return `
-                <li style="display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; border-bottom: 1px solid #eee; transition: background 0.2s;" 
+                <li style="display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; border-bottom: 1px solid #eee; transition: background 0.2s;"
                     data-xpath="${item.xpath}"
                 >
                     <div class="iframe-info" style="cursor: pointer; flex-grow: 1;" title="点击高亮">
@@ -3295,9 +3272,9 @@ resultWin.querySelector('#sel-reset').onclick = resetMode;
                             XPath: ${safeTruncate(item.xpath, 70)}
                         </div>
                     </div>
-                    
+
                     <button class="remove-iframe-btn" style="
-                        background: #dc3545; color: white; border: none; padding: 2px 6px; 
+                        background: #dc3545; color: white; border: none; padding: 2px 6px;
                         margin-left: 10px; cursor: pointer; border-radius: 3px; font-size: 11px;
                     " data-xpath="${item.xpath}">移除并保存</button>
                 </li>
@@ -3341,8 +3318,8 @@ resultWin.querySelector('#sel-reset').onclick = resetMode;
         modalOverlay.classList.add('notranslate')
         // 复用已有的模态框样式逻辑
         modalOverlay.style.cssText = `
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-        background: rgba(0, 0, 0, 0.7); z-index: 114120; 
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.7); z-index: 114120;
         display: flex; justify-content: center; align-items: center;
         backdrop-filter: blur(2px);
     `;
@@ -3350,7 +3327,7 @@ resultWin.querySelector('#sel-reset').onclick = resetMode;
         const modalBox = document.createElement('div');
         modalBox.style.cssText = `
         color: black;
-        background: white; border-radius: 10px; padding: 20px; 
+        background: white; border-radius: 10px; padding: 20px;
         box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3); width: 90%; max-width: 400px;
     `;
 
@@ -3492,7 +3469,7 @@ resultWin.querySelector('#sel-reset').onclick = resetMode;
                         ${safeTruncate(pageKey, 50)}
                     </span>
                     <button class="remove-blacklist-btn" style="
-                        background: #1976D2; color: white; border: none; padding: 2px 6px; 
+                        background: #1976D2; color: white; border: none; padding: 2px 6px;
                         margin-left: 10px; cursor: pointer; border-radius: 3px; font-size: 11px;
                     " data-page-key="${pageKey}">取消黑名单</button>
                 </li>
@@ -3509,7 +3486,7 @@ resultWin.querySelector('#sel-reset').onclick = resetMode;
                         ${safeTruncate(xpath, 40)}
                     </span>
                     <button class="undo-btn" style="
-                        background: #FFB300; color: #333; border: none; padding: 2px 6px; 
+                        background: #FFB300; color: #333; border: none; padding: 2px 6px;
                         margin-left: 10px; cursor: pointer; border-radius: 3px; font-size: 11px;
                     " data-xpath="${xpath}">取消移除</button>
                 </li>
@@ -3527,7 +3504,7 @@ resultWin.querySelector('#sel-reset').onclick = resetMode;
                         [IFRAME] ${safeTruncate(xpath, 30)}
                     </span>
                     <button class="undo-iframe-btn" style="
-                        background: #FFB300; color: #333; border: none; padding: 2px 6px; 
+                        background: #FFB300; color: #333; border: none; padding: 2px 6px;
                         margin-left: 10px; cursor: pointer; border-radius: 3px; font-size: 11px;
                     " data-xpath="${xpath}">取消移除</button>
                 </li>
@@ -3572,7 +3549,7 @@ resultWin.querySelector('#sel-reset').onclick = resetMode;
                 const docUrlTail = itemDoc.URL ? itemDoc.URL.split('/').pop() : 'unknown';
 
                 return `
-        <li style="display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; border-bottom: 1px solid #eee; transition: background 0.2s;" 
+        <li style="display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; border-bottom: 1px solid #eee; transition: background 0.2s;"
             data-xpath="${item.xpath || ''}"
             data-doc-url="${docUrlTail}"
         >
@@ -3583,7 +3560,7 @@ resultWin.querySelector('#sel-reset').onclick = resetMode;
                 <span style="color: #333; margin-left: 10px;">${item.width || 0}x${item.height || 0}px</span>
             </div>
             <button class="remove-btn" style="
-                background: #dc3545; color: white; border: none; padding: 2px 6px; 
+                background: #dc3545; color: white; border: none; padding: 2px 6px;
                 margin-left: 10px; cursor: pointer; border-radius: 3px; font-size: 11px;
             " data-xpath="${item.xpath || ''}">移除</button>
         </li>`;
@@ -3597,21 +3574,21 @@ resultWin.querySelector('#sel-reset').onclick = resetMode;
 
         windowDiv.innerHTML = `
             <div id="gemini-header">
-                <strong>🔍 元素屏蔽/追踪器 (V26.39.12)</strong>
+                <strong>🔍 元素屏蔽/追踪器 (V26.40)</strong>
                 <button id="gemini-pin-btn">📌</button>
                 <span id="gemini-close-btn">&times;</span>
             </div>
-            
+
             <div style="padding: 4px 5px; font-size:xx-small;border-bottom: 1px solid #ccc; text-align: center;">
-                
+
                 <button id="blacklist-toggle" style="height:30px !important;padding:5px;font-size: xx-small !important;font-weight: normal;" class="${isBlacklisted ? 'closer' : ''}">
                 ${isBlacklisted ? '🛡️ 当前为黑名单页 (启用严格沙箱)' : '➕ 标记为黑名单页 (启用严格沙箱)'}
                 </button>
-                
-                
 
 
-               
+
+
+
 
                    <button id="selector-toggle">
                     启用 🖱️选择并屏蔽模式 (xPath)
@@ -3626,7 +3603,7 @@ resultWin.querySelector('#sel-reset').onclick = resetMode;
                     🛠️ 元素点击调试 (${isDebuggingElementClick ? '开' : '关'})
                     </button>
 
-                 
+
 
                     <button id="debug-location-toggle" class='${isDebuggingLocationHooks ? 'greener' : 'open'}'>
                     ⚙️ JS 重定向调试 (${isDebuggingLocationHooks ? '开' : '关'})
@@ -3636,7 +3613,7 @@ resultWin.querySelector('#sel-reset').onclick = resetMode;
     <div style="grid-template-columns: 1fr 1fr;margin-bottom:2px;display: grid;gap: 2px;">
 
 
-    <button id="showXPath" 
+    <button id="showXPath"
     onclick="showXPathInputWindow()">
     ⌨️ 输入 XPath 屏蔽
     </button>
@@ -3645,23 +3622,23 @@ resultWin.querySelector('#sel-reset').onclick = resetMode;
     onclick="showCssInputWindow()">
         🎨 输入 CSS 选择器屏蔽
     </button>
-    
+
     <button id="manual-xpath-add"
     onclick="window.showPageScriptsFloatWindow()">
     📟 查看页面上的脚本</button>
 
-    <button id="manual-xpath-runCode" 
+    <button id="manual-xpath-runCode"
     onclick="window.showJsManager()" >
     🧑‍💻执行JS代码</button>
 
-    <button id="manual-css-webdebug"     
+    <button id="manual-css-webdebug"
     onclick="window.initWebDebugger()">
      ⚙️ Web 存储调试器
     </button>
 
-     <button id="crazyMode"     
+     <button id="crazyMode"
     onclick="window.crazyMode(this)">
-     🔴狂野模式(OFF) 
+     🔴狂野模式(OFF)
     </button>
 
     <button id="manual-css-switchClear">
@@ -3706,7 +3683,7 @@ resultWin.querySelector('#sel-reset').onclick = resetMode;
                     <ul id="gemini-saved-list" style="list-style: none; padding: 0; margin: 0;">
                          <li style="padding: 10px; background: #ffe6e6; font-weight: bold; color: #dc3545; border-bottom: 1px solid #ffcccc;">🚫 黑名单页面记录 (${getPageBlacklist().length})</li>
                          ${renderBlacklist(getPageBlacklist())}
-                         
+
                          <li style="padding: 10px; background: #fafafa; font-weight: bold; color: #666; border-top: 1px solid #eee; border-bottom: 1px solid #eee;">🛡️ 元素永久移除记录 (${getSavedRemovals().length})</li>
                          ${renderSavedRemovalsList(getSavedRemovals())}
 
@@ -3718,7 +3695,7 @@ resultWin.querySelector('#sel-reset').onclick = resetMode;
                              <button id="repair-css-data-btn" style="background: #9c27b0; color: white; border: 1px solid #fff; padding: 2px 8px; cursor: pointer; border-radius: 3px; font-size: 11px; font-weight: normal;">🛠️ 修复脏数据</button>
                          </li>
                          ${renderSavedCssRemovalsList(getSavedCssRemovals())}
-                         
+
                     </ul>
                 </div>
             </div>
@@ -3908,7 +3885,7 @@ resultWin.querySelector('#sel-reset').onclick = resetMode;
 
             // 检查事件是否发生在任一容器内部
             // 如果 target.closest 找到匹配元素，则条件为真
-            if (target.closest(`#${containerId}`) || target.closest('[id*="script-viewer"],[class*="confirm]') || target.closest('#confirmMask')) {
+            if (target.closest(`#${containerId}`)  || target.closest('[id*="script-viewer"],[class*="confirm]') || target.closest('#confirmMask')) {
                 // 事件发生在受保护的容器内部
                 e.stopPropagation(); // 阻止其冒泡到父元素
                 return;              // 退出函数，不执行后续的阻止默认行为
@@ -4149,7 +4126,7 @@ resultWin.querySelector('#sel-reset').onclick = resetMode;
 
 
         savedList.addEventListener('click', (e) => {
-            // 取消普通元素移除记录  
+            // 取消普通元素移除记录
             if (e.target.classList.contains('undo-btn')) {
                 const xpath = e.target.getAttribute('data-xpath');
                 if (removeRemovalChoice(xpath)) {
@@ -4369,18 +4346,18 @@ resultWin.querySelector('#sel-reset').onclick = resetMode;
 
         if (e.target && e.target.id === 'gemini-close-btn') {
             if (typeof stopSelectorTool == 'function') {
-                stopSelectorTool(); // 关闭 ⚓ 元素CSS选择器获取 
+                stopSelectorTool(); // 关闭 ⚓ 元素CSS选择器获取
                 // 如果用户关闭元素屏蔽/追踪器面板
             }
         }
 
 
 
-if (e.target && e.target.id === 'sel-close-main') {
-            if (typeof resetMode== 'function') {
-                resetMode(); 
+        if (e.target && e.target.id === 'sel-close-main') {
+            if (typeof resetMode == 'function') {
+                resetMode();
             }
-}
+        }
 
 
 
@@ -4753,7 +4730,7 @@ if (e.target && e.target.id === 'sel-close-main') {
     }
 
 
-    // 捕获元素 
+    // 捕获元素
 
     window.getSmartSelector_element_click_debug_mode = function getSmartSelector_element_click_debug_mode(el) {
         if (!(el instanceof Element)) return '';
@@ -4845,7 +4822,7 @@ if (e.target && e.target.id === 'sel-close-main') {
         return path.join(' > ');
     }
 
-    // 捕获元素 结束 
+    // 捕获元素 结束
 
     function setupAdLinkFilter() {
         const targetDocuments = getTargetDocuments();
@@ -4919,7 +4896,7 @@ if (e.target && e.target.id === 'sel-close-main') {
         modal.className = 'notranslate'
         modal.style.cssText = `
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background-color: rgba(0, 0, 0, 0.7); 
+        background-color: rgba(0, 0, 0, 0.7);
         z-index: 100000000; /* 确保堆叠顺序最高 */
         display: flex; justify-content: center; align-items: center;
     `;
@@ -5016,7 +4993,7 @@ if (e.target && e.target.id === 'sel-close-main') {
     }
 
     // =================================================================
-    // 核心启动函数 
+    // 核心启动函数
     // =================================================================
     function initScript() {
 
@@ -5080,28 +5057,28 @@ if (e.target && e.target.id === 'sel-close-main') {
         /* 默认拦截
         enableWindowOpenHook();
         interceptWindowLocation();
-    
+
         // ⬇️⬇️⬇️ Hook 所有重定向相关 API (V26.39.10 核心：同步中断) ⬇️⬇️⬇️
-    
+
         // 1. Hook History API
         interceptHistoryAPI(window, 'window');
         if (window.parent !== window) { interceptHistoryAPI(window.parent, 'parent'); }
         if (window.top !== window) { interceptHistoryAPI(window.top, 'top'); }
-    
+
         // 2. Hook Form 表单提交
         interceptFormSubmission();
-    
+
         // 3. Hook document.write
         interceptDocumentWrite();
-    
+
         // ⭐️ 4. Hook Element.prototype.click (程序化点击拦截 - V26.39.10 NEW)
         interceptElementClick();
-    
+
         // ⭐️ 5. Hook window.postMessage (跨框架侧信道拦截 - V26.39.10 NEW)
         interceptPostMessage();
-    
+
         // ⬆️⬆️⬆️ Hook 所有重定向相关 API ⬆️⬆️⬆️
-    
+
         */
 
         setupAdLinkFilter(); // 元素点击调试监听器放在这里
@@ -5121,10 +5098,10 @@ if (e.target && e.target.id === 'sel-close-main') {
                 const activationSource = isHostInDebugList && !isCurrentHostOverridden() ? '域名匹配（自动）' : '本地存储（手动开启）';
                 console.log(`[Gemini屏蔽 V26.39.10] 🎯 调试模式已开启 (${activationSource})，自动打开浮窗。`);
 
-                // 由于 targetDocuments 已经在前面获取，这里直接使用   
+                // 由于 targetDocuments 已经在前面获取，这里直接使用
                 renderFloatWindow(targetDocuments);
 
-                // 仅当 body_build 在时调 用（兼容其他环境） 
+                // 仅当 body_build 在时调 用（兼容其他环境）
                 if (typeof body_build === 'function') {
                     try { body_build('false'); } catch (e) { }
                 }

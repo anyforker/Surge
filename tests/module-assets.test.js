@@ -119,17 +119,11 @@ test("upstream module mirror has a declared source and required sections", () =>
   assert.match(bilibili, /^#!category=AdBlock$/m);
   assert.match(
     bilibili,
-    /^#!homepage\s*=\s*https:\/\/ADBlock\.BiliUniverse\.io$/m
+    /^#!homepage\s*=\s*https:\/\/(?:ADBlock\.BiliUniverse\.io|biliverse\.github\.io\/guide\/ad-block)$/m
   );
   assert.match(bilibili, /app\.bilibili\.com/);
   assert.match(bilibili, /grpc\.biliapi\.net/);
-  for (const section of [
-    "URL Rewrite",
-    "Map Local",
-    "Body Rewrite",
-    "Script",
-    "MITM",
-  ]) {
+  for (const section of ["Map Local", "Script", "MITM"]) {
     assert.match(bilibili, new RegExp(`^\\[${section}\\]$`, "m"));
   }
 
