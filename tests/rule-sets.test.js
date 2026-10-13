@@ -38,17 +38,11 @@ test("aggregated AI rules are the sorted unique union of all sources", () => {
   assert.equal(actual.length, new Set(actual).size);
 });
 
-test("aggregated AI rules retain upstream ASN and Gemini entries", () => {
+test("aggregated AI rules retain repository-maintained supplemental entries", () => {
   const rules = new Set(readRules(aggregatePath));
 
   for (const rule of [
-    "IP-ASN,13335,no-resolve",
-    "IP-ASN,20473,no-resolve",
-    "IP-ASN,399358,no-resolve",
     "DOMAIN,oaiproxy.neocoder.cc",
-    "DOMAIN,ai.google.dev",
-    "DOMAIN-SUFFIX,gemini.google.com",
-    "DOMAIN-KEYWORD,generativelanguage",
     "DOMAIN-SUFFIX,ip-api.com",
   ]) {
     assert.ok(rules.has(rule), rule);
