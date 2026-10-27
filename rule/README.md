@@ -9,6 +9,7 @@
 ```ini
 RULE-SET,https://raw.githubusercontent.com/anyforker/Surge/main/rule/ai.list,AI
 RULE-SET,https://raw.githubusercontent.com/anyforker/Surge/main/rule/emby.list,Emby
+RULE-SET,https://raw.githubusercontent.com/anyforker/Surge/main/rule/forum.list,论坛
 RULE-SET,https://raw.githubusercontent.com/anyforker/Surge/main/rule/upstream/blackmatrix7/ChinaMax/ChinaMax_All.list,DIRECT
 ```
 
@@ -32,8 +33,17 @@ RULE-SET,https://raw.githubusercontent.com/anyforker/Surge/main/rule/upstream/bl
 | --- | --- | --- |
 | [`ai-custom.list`](ai-custom.list) | AI 聚合规则的本仓库补充来源 | 不建议单独引用 |
 | [`emby.list`](emby.list) | 自维护 Emby 服务域名 | `https://raw.githubusercontent.com/anyforker/Surge/main/rule/emby.list` |
+| [`forum.list`](forum.list) | 论坛：NodeSeek、烧饼论坛、V2EX 的关键域名 | `https://raw.githubusercontent.com/anyforker/Surge/main/rule/forum.list` |
 | [`corp.list`](corp.list) | 企业及办公网络相关规则 | `https://raw.githubusercontent.com/anyforker/Surge/main/rule/corp.list` |
 | [`direct.list`](direct.list) | ChinaMax 聚合规则的本仓库补充来源 | 不建议单独引用 |
+
+### 论坛规则
+
+[`forum.list`](forum.list) 合并 NodeSeek、烧饼论坛和 V2EX 的主站、图片资源及验证接口，共 8 条规则。`DOMAIN-SUFFIX,nodeseek.com` 同时覆盖 `www.nodeseek.com`、`edge.nodeseek.com`，`DOMAIN-SUFFIX,sb.sb` 同时覆盖资源域名 `sb.sb.sb`；NodeImage、Fog、图片代理和 Cap 接口使用精确域名匹配。
+
+V2EX 使用 `DOMAIN-SUFFIX,v2ex.com` 覆盖主站、登录及 `cdn.v2ex.com`、`static.v2ex.com` 等资源域名，并通过 `DOMAIN-SUFFIX,v2ex.co` 覆盖站点引用的图片域名 `i.v2ex.co`。
+
+统计服务、帖子外链图床，以及 Cloudflare、Telegram 等共享服务沿用各自分流。将此规则集绑定到你的“论坛”策略组，并放在通用代理、直连和 `FINAL` 规则之前。
 
 ## 上游镜像
 

@@ -1,0 +1,21 @@
+# NAME: 论坛
+# AUTHOR: anyforker
+# REPO: https://github.com/anyforker/Surge
+# UPDATED: 2026-10-27
+# DOMAIN: 4
+# DOMAIN-SUFFIX: 4
+# TOTAL: 8
+
+# NodeSeek：主站、图片资源与 PoW 验证
+DOMAIN-SUFFIX,nodeseek.com
+DOMAIN,cdn.nodeimage.com
+DOMAIN,fog.22112211.xyz
+
+# 烧饼论坛：主站（含 sb.sb.sb）、图片代理与 Cap 验证
+DOMAIN-SUFFIX,sb.sb
+DOMAIN,cache.imgproxy.org
+DOMAIN,capjs.net
+
+# V2EX：主站、登录、CDN 与图片资源
+DOMAIN-SUFFIX,v2ex.com
+DOMAIN-SUFFIX,v2ex.co
