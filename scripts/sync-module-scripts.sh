@@ -91,6 +91,7 @@ while IFS=$'\t' read -r target source mode extra; do
   fi
 
   tmp_file="$tmp_dir/$(basename "$target")"
+  printf 'Syncing %s <- %s\n' "$target" "$source"
   case "$mode" in
     mirror)
       download "$source" > "$tmp_file"

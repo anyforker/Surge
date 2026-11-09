@@ -64,6 +64,9 @@ const expectedScripts = [
 
 const locallyMaintainedScripts = new Set([
   "ai-check.js",
+  // Keep the last checked-in copies while the upstream release URLs are unavailable.
+  "iringo-location-request.js",
+  "iringo-location-response.js",
   "network-speed.js",
   "stream-media.js",
 ]);
